@@ -1,0 +1,64 @@
+program concecionaria;
+type   
+  str20 = string[20];
+
+autos = record
+  marca:str20;
+  modelo:integer;
+  precio:real;
+end;
+
+procedure leerAutos(var auto: autos);
+begin
+  writeln('Ingrese marca:');
+  readln(auto.marca);
+  if (auto.marca <> 'ZZZ') then
+  begin
+    writeln('Ingrese modelo:');
+    readln(auto.modelo);
+    writeln('Ingrese precio:');
+    readln(auto.precio);
+  end;
+end;
+
+procedure auto_caro(var autos2:autos);
+var
+  auto: autos;
+  marca_actual:str20;
+  marca_cara: str20;
+  modelo_caro: integer;
+  precio_caro: real;
+  cant:integer;
+  precio_total:real;
+  promedio:real;
+begin
+  marca_cara:= '';
+  modelo_caro:= 0;
+  precio_caro:= 0;
+  marca_actual:='';
+  cant:=0;
+  promedio:=0;
+  precio_total:=0;
+  leerAutos(auto);
+  while( marca_actual = auto.marca)do begin
+    marca_actual:= auto.marca;
+    cant:=cant + 1;
+    precio_total:=precio_total + auto.precio;
+    promedio:= precio_total/cant;
+    if(precio_caro > auto.precio)then
+      precio_caro:= auto.precio;
+      marca_cara:= auto.marca;
+      modelo_caro:= auto.modelo;
+    leerAutos(auto);
+  end;
+  writeln('el precio promedio de la marca ',auto.marca,' es ', promedio);
+  Writeln('La marca ',marca_cara,'modelo ',modelo_caro,' es el auto mas caro');
+  end;
+
+var
+  auto:autos;
+
+begin
+  leerAutos(auto)
+  auto_caro(autos);
+end.
