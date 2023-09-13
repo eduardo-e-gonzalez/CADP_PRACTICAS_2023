@@ -1,0 +1,106 @@
+program eje8;
+type
+	  
+  docente=record
+    dni:integer;
+    nombre:string;
+    apellido:string;
+    email:string;
+  end;
+  
+  proyecto=record
+    codigo:integer;
+    titulo:string;
+    doc:docente;
+    cant_alu:integer;
+    escuela:string;
+    localidad:string;
+  end;
+
+procedure leer_proyecto(var pro:proyecto);
+begin
+	writeln ('ingrese el codigo');
+	readln(pro.codigo);
+	if(pro.codigo<>-1) then begin
+		writeln ('ingrese el titulo');
+		readln(pro.titulo);
+		writeln ('ingrese el DNI del docente');
+		readln(pro.doc.dni);
+		writeln ('ingrese el nombre del docente');
+		readln(pro.doc.nombre);
+		writeln ('ingrese el apellido del docente');
+		readln(pro.doc.apellido);
+		writeln ('ingrese el email del docente');
+		readln(pro.doc.email);
+		writeln ('ingrese la cantidad de alumnos en el proyecto');
+		readln(pro.cant_alu);
+		writeln ('ingrese el nombre de la escuela');
+		readln(pro.escuela);
+		writeln ('ingrese la localidad');
+		readln(pro.localidad);
+	end
+end;
+
+function pares (cod:integer):boolean;
+var
+	par, impar:integer;
+	dig:integer;
+begin
+	par:=0;
+	impar:=0;
+	while(cod <>0) do begin
+		dig :=(cod mod 10);
+		if (dig mod 2=0)then begin
+			par:=par +1;
+		else
+			impar:=impar +1;
+		end
+		cod:= cod div 10;	
+	end
+	pares:= (par=impar);
+	end
+end
+
+procedure maximos(pro:proyecto, var  nom_max_1, nom_max_2:string);
+var
+	max_alu_1, max_alu_2:integer;
+begin
+	if (pro.cant_alu >max_alu_1)then begin
+		max_alu_2:= max_alu_1;
+		nom_max_2:=nom_max_1;
+		max_alu_1:=pro.cant_alu;
+		nom_alu_1:=pro.nombre;
+	else(pro.cant_alu >max_alu_2)then begin
+		max_alu_2:= pro.cant_alu;
+		nom_max_2:=pro.nombre;
+	end
+end
+			/////PP///////
+var
+	pro:proyecto;
+	nom_max_1, nom_max_2:string, esc_actual, loc_act:string;
+	max_alu_1, max_alu_2:integer;
+	cant_esc, cant_escu_loc:integer;
+begin
+	max_alu_1:=0;
+	max_alu_2:=0;
+	leer_proyecto(pro);
+	cant_esc:=0;
+	while (pro.cod <>-1) do begin
+		cant_esc:=cant_escu+1
+		esc_act:=pro.nombre
+		loc_act:=pro.localidad;
+		maximos(pro,no_max_1,nom_max_2);
+		cant_escu_loc:=0
+		writeln('la cantidad de escuelas de ', loc_act,' es de ', 
+		while (pro.cod <>-1)and (pro.localidad=loc_act)do begin
+			cant_esc_loc:=cant_esc_loc+1;
+			writeln('la cantidad de escuelas de la localidad ', esc_loc);
+			if(pro.cod <>-1)and(pro.localidad=loc_act)and(pro.nombre=Daireaux)and (pares(cod);then
+				writeln(pro.nombre,' tiene en su codigo la misma cantidad de numeros pares que impares');
+		end
+		leer_proyecto(pro);
+	 writeln(nom_max_1, nom_max_2,' son las wescuelas con mayor cantidad de alumnos');
+	end	
+
+			
