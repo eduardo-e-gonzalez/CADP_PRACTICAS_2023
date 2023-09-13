@@ -1,0 +1,57 @@
+program eje6;
+
+procedure leer (var pre:real; var cod:integer; var tip:string);
+begin
+  writeln('ingrese el precio');
+  readln (pre);
+  writeln('ingrese el codigo');
+  readln (cod);
+  writeln('ingrese el tipo');
+  readln (tip);
+end;
+procedure productos(precio:real; codigo:integer; tipo:string);
+var
+  i,codbarato1, codbarato2,codigPancaro, cantproductos:integer;
+  preciomasbarato1, preciomasbarato2, prePancaro, preciototal:real;
+  
+begin
+  prePancaro:=0;
+  cantproductos:=0;
+  preciototal:=0;
+  preciomasbarato1:=99999;
+  preciomasbarato2:=99999;
+  for i:= 1 to 100 do begin
+    leer(precio,codigo,tipo);
+    cantproductos:= cantproductos+1;
+    preciototal:= preciototal+precio;
+    if(precio<preciomasbarato1)then begin
+      preciomasbarato2:=preciomasbarato1;
+      preciomasbarato1:=precio;
+      codbarato2:=codbarato1;
+      codbarato1:=codigo;
+    end
+    else
+      if(precio<preciomasbarato2) then begin
+       preciomasbarato2:=precio;
+       codbarato2:=codigo;
+      end;
+    if(tipo='pantalon')then begin
+      if(precio>prePancaro)then begin
+        prePancaro:=precio;
+        codigPancaro:=codigo;
+      end;
+    end;
+  end;
+  writeln('los codigos de los productos mas baratos son: ', codbarato1, ' y ', codbarato2);
+  writeln ('el codigo del pantalon mas caro es: ', codigPancaro);
+  writeln('el promedio es: ', preciototal/cantproductos);
+end;
+
+var
+  precio:real;
+  codigo:integer;
+  tipo:string;
+
+begin
+ productos(precio,codigo,tipo);
+end.
