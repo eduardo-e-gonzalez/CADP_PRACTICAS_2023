@@ -1,0 +1,30 @@
+program eje5;
+
+procedure es_el_doble(var numA, numB, cant_par_doble:integer);
+var
+  doble:integer
+begin
+  doble:=numA*2;
+  if(numB=doble)then begin
+    cant_doble:=cant_par_doble +1;
+    writeln(numB,'Es el doble de ', numA);
+  end
+  else
+    writeln(numB,'No es el doble de ', numA);
+  end
+end
+  
+var
+  numA, numB,cant_par,cant_par_doble:integer;
+begin
+  cant_par:=0;
+  cant_par_doble:=0;
+  writeln('ingrese dos nuemros');
+  readln(numA);readln(numB);
+  while(numA<>0) and(numB<>0) do begin
+    cant_par:=cant_par +1;
+    es_el_doble(numA,numB,cant_par_doble);
+    writeln('ingrese dos nuemros');
+    readln(numA);readln(numB);
+  end
+end
