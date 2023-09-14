@@ -1,0 +1,64 @@
+program eje7;
+type
+	centro=record
+		nombre:string;
+		uni:string;
+		cant_inv:integer;
+		cant_vec:integer;
+	end;
+
+procedure leer(var cen:centro);
+begin
+	writeln('ingrese nombre');
+	readln(cen.nombre);
+	writeln('ingrese universidad');
+	readln(cen.uni);
+	writeln('ingrese cantidad de investigadores');
+	readln(cen.cant_inv);
+	writeln('ingrese cantidad de vecarios');
+	readln(cen.cant_vec);
+end;
+
+procedure maximos(cen:centro; var n_may_cant:string; var max_inv:integer);
+begin
+	if(cen.cant_inv>max_inv)then begin
+		max_inv:=cen.cant_inv;
+		n_may_cant:=cen.nombre;
+	end
+end;
+
+procedure minimos(cen:centro; var men_cen_1,men_cen_2:string; var cant_vec_1, cant_vec_2: integer);
+begin
+	if(cen.cant_vec<cant_vec_1)then begin
+		cant_vec_2:= cant_vec_1;
+		men_cen_2:=men_cen_1;
+		cant_vec_1:=cen.cant_vec;
+		men_cen_2:=cen.nombre;
+	end
+	else 
+		if(cen.cant_vec<cant_vec_2) then begin
+			cant_vec_2:=cen.cant_vec;
+			men_cen_2:=cen.nombre;
+	end
+end;
+
+var
+	cen:centro;
+	uni_actual, n_may_cant,men_cen_1, men_cen_2: string;
+	cant_total_uni, cant_vec_1, cant_vec_2:integer;
+	max_inv:integer;
+begin
+	
+	cant_vec_1:=9999;
+	cant_vec_2:=9999;
+	cant_total_uni:=0;
+	leer(cen);
+	while(cen.cant_vec<>0)do begin
+		uni_actual:=cen.uni;
+		minimos(cen, men_cen_1, men_cen_2, cant_vec_1, cant_vec_2);
+		if(cen.uni=uni_actual)then
+			cant_total_uni:=cant_total_uni +1;
+			maximos(cen, n_may_cant,max_inv);
+		leer(cen);
+	end;
+end.
