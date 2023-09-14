@@ -1,0 +1,73 @@
+program eje6;
+type
+	micro=record
+		marca:string;
+		linea:string;
+		cant_core:integer;
+		velocidad:integer;
+		tam_trans:integer;
+	end;
+
+procedure leer (var mi:micro);
+begin
+	writeln('ingresar marca');
+	readln(mi.marca);
+	writeln('ingresar linea');
+	readln(mi.linea);
+	writeln('ingresar cantidad de cores');
+	readln(mi.cant_core);
+	writeln('ingresar velocidad en hz');
+	readln(mi.velocidad);
+	writeln('ingresar tamaño de transitores');
+	readln(mi.tam_trans);
+end;
+
+function masde2c22n(mi:micro):boolean;
+begin
+	if(mi.cant_core>2)and(mi.tam_trans>=22)then  
+		masde2c22n:=true
+	else
+		masde2c22n:=false;
+end;
+
+procedure maximos(mic:micro; var marc1, marc2:string; max_contador, max_contador_1, max_contador_2:integer);
+begin
+	if(max_contador_1>max_contador)then begin
+		max_contador_2:=max_contador_1;
+		marc2:=marc1;
+		max_contador_1:=max_contador;
+		marc1:=mic.marca;
+	end
+	else
+		if(max_contador_2>max_contador)then begin
+			max_contador_2:=mic.cant_core;
+			marc1:=mic.marca;
+		end;
+end;
+
+var
+	mic:micro;
+	marc1, marc2, marca_actual:string;
+	max_contador, max_contador1, max_contador2, cant_marcas:integer;
+begin
+	cant_marcas:=0;
+	max_contador:=0;
+	max_contador1:=0;
+	max_contador2:=0;
+	leer(mic);
+	while(mic.cant_core<>0)do begin
+		marca_actual:=mic.marca;
+		while(mic.marca=marca_actual)do begin
+			if(masde2c22n(mic))then begin
+				writeln(mic.marca , mic.linea,' tiene mas de 2 core y a lo sumo 22nm');
+				if(mic.marca='intel')or(mic.marca='amd')then begin
+					if(mic.marca='intel')or(mic.marca='amd')and(mic.velocidad>=2)then
+						cant_marcas:=cant_marcas+1;
+				end
+			end;	
+		leer(mic);
+		end;
+	end;
+	writeln('Procesadores AMD o Intel de mas de 2gh son ', cantmarcas);
+	writeln('las dos marcas con mayor cantidadd de procesadores con transitoes de 14 son ',marc1, marc2); 
+end.
