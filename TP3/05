@@ -1,0 +1,56 @@
+program eje5;
+type
+	auto=record
+		marca:string;
+		modelo:integer;
+		precio:real;
+	end;
+procedure leer(var au:auto);
+begin
+	writeln('ingrese marca');
+	readln(au.marca);
+	while(au.marca<>'zzz')do begin
+		writeln('ingrese modelo');
+		readln(au.modelo);
+		writeln('ingrese precio');
+		readln(au.precio);
+	end;
+end;
+
+procedure maximo(au:auto; var marca_max:string; var modelo_max:integer; var precio_max_general:real;);
+begin
+	precio_max:=0;
+	if(au.precio>precio_max)then begin
+		precio_max:=au.precio;
+		marca_max:=au.marca;
+		modelo_max:=au.modelo;
+	end;
+end;
+
+var
+	au:auto;
+	marca_max:string;
+	modelo_max:integer;
+	cant_total_marca:integer;
+	precio_total_marca, preio_max_general:real;
+	marca_actual:string;
+begin
+	marca_max:='';
+	modelo_max:=0;
+	cant_total_marca:=0;
+	precio_total_marca:=0;
+	preio_max_general:=0;
+	leer(au);
+	while(au.marca <>'zzz')do begin
+		marca_actual:=au.marca;
+		if(au.marca=marca_actual)then begin
+			cant_total_marca:=cant_total_marca+1;
+			precio_total_marca:=precio_total_marca+au.precio;
+			maximo(au,marca_max, modelo_max,preio_max_general);
+			leer(au);	
+		end;
+		writeln('el precio promedio por marca es ',precio_total_marca/cant_total_marca);
+	end
+	writeln(marca_max, modelo_max,' es el auto mas caro con el precio ', preio_max_general);
+end.
+	
