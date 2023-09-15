@@ -1,0 +1,71 @@
+program eje10;
+const 
+  dimf = 300;
+  aumento = 1.15;
+type
+  empleados = array [1..300] of real;
+
+procedure inicializar_vector(var em: empleados; var diml: integer);
+var
+  i: integer;
+begin
+  diml := 0;
+  for i := 1 to dimf do
+  begin
+    em[i] := 0;
+  end;
+end;
+
+procedure cargar_vector(var em: empleados; var diml: integer);
+var
+  i: integer;
+begin
+  diml := 0;
+  while (diml < dimf) do
+  begin
+    for i := 1 to dimf do
+    begin
+      diml := diml + 1;
+      writeln('ingrese salario del empleado');
+      read(em[diml]);
+    end;
+  end;
+end;
+
+procedure incrementar(var em: empleados; diml: integer);
+var
+  i: integer;
+begin
+  for i := 1 to diml do
+  begin
+    em[i] := em[i] * aumento;
+  end;
+end;
+
+procedure promedios(em: empleados; diml: integer; var promedio: real);
+var
+  i: integer;
+  total_salario: real;
+begin
+  total_salario := 0;
+  for i := 1 to diml do
+  begin
+    total_salario := total_salario + em[i];
+  end;
+  promedio := total_salario / diml;
+end;
+
+var
+  em: empleados;
+  diml: integer;
+  promedio: real;
+begin
+  inicializar_vector(em, diml);
+  cargar_vector(em, diml);
+  incrementar(em, diml);
+  promedios(em, diml, promedio);
+  writeln('el sueldo con incremento es '); 
+  for diml := 1 to dimf do
+    writeln(em[diml]);
+  writeln('el sueldo promedio es ', promedio);
+end.
