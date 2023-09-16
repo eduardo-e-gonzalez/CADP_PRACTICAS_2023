@@ -1,0 +1,105 @@
+program eje11;
+const
+	dimf=200;
+type
+	publicacion=record
+		titulo:string;
+		autor:string;
+		cant_mg:integer;
+		cant_click:integer;
+		cant_comentarios:integer;
+	end;
+
+	fotos=array[1 ..dimf]of integer;
+
+procedure leer(var pub:publicacion);
+begin
+	writeln('ingrese tirulo');
+	readln(pub.titulo);
+	writeln('ingrese autor');
+	readln(pub.autor);
+	writeln('ingrese cantidad de Me Gustas');
+	readln(pub.cant_mg);
+	writeln('ingrese cantidad de de click');
+	readln(pub.cant_click);
+	writeln('ingrese cantidad de comentarios');
+	readln(pub.cant_comentarios);
+end;
+	
+procedure inicializar_vector(var fo:fotos);
+var
+	i:integer;
+begin
+	for i:= 1 to dimf do begin
+		fo[i]:=0;
+	end;
+end;
+
+procedure cargar_vector(var fo:fotos; pub:publicacion);
+var
+	i:integer;
+begin
+	for i:= 1 to dimf do begin
+		leer(pub);
+	end;
+end;
+
+function mas_vista(pub:publicacion; fo: fotos): string;
+var
+  i: integer;
+  max_click: integer;
+  max_titulo: string;
+begin
+	max_click := 0;
+	max_titulo := '';
+	for i:=1 to dimf do begin
+		if (pub[i].cant_click > max_click) then begin ////////////da error aqui/////////////
+			max_click := pub[i].cant_click;
+			max_titulo := pub[i].titulo;
+		end;
+	end;
+	  mas_vista := max_titulo;
+end;
+
+
+procedure cant_mg(fo:vec_foto; dimf:integer; var total_cant_mg:integer);
+var
+	i,:integer
+begin
+	total_cant_mg:=0;
+	for i:=1 to dimf do begin
+		if(pub[i].autor=“Art Vandelay”)then begin
+			total_cant_mg:total_cant_mg + pub[i].cant_mg);
+		end;
+	end;
+end;
+
+function total_comentarios(pub:publicaciones);
+var
+	i, total_:integer;
+	total_comentarios:integer;
+begin
+	total_comentarios:=0;
+	for i:=1 to diml do begin
+		total_comentarios:=total_comentarios+pub[i].cant_comentarios;
+	end;
+end;
+
+//////////////pp////////////////
+var
+	pu:publicacion;
+	fo:fotos;
+	total_cant_mg:integer;
+	i:integer;
+begin
+	inicializar_vector(pu,diml);
+	cargar_vector(pu, fo);
+	mas_vista(pub,fo);
+	writeln('la foto mas vista es ', mas_vista);
+	total_cant_mg:=0;
+	writeln('Art Vandelay tiene ', total_cant_mg);
+	for i:=1 to di,l do begin
+		total_comentarios(pub);
+	end
+end
+	
