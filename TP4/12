@@ -1,0 +1,89 @@
+///////////////EN PROGRESO/////////////////
+program eje12;
+const
+    dimf=53;
+    tipos=1..4;
+type
+    galaxia=record
+        nombre:string;
+        tipo:tipos;
+        masa:real;
+        distancia:real;
+    end;
+
+    vector[1 .. dimf ] of integer;
+    vector_contador[1 .. 4] of integer;
+
+procedure leer_galaxias(var ga:_galaxia);
+begin
+    writeln('ingresa nombre');
+    readln(ga.nombre);
+    writeln('ingresa tipo');
+    readln(ga.tipo);
+    writeln('ingresa masa');
+    readln(ga.masa);
+    writeln('ingresa distancia');
+    readln(ga.distancia);
+end;
+
+procedure inicializar_vbector(var ve:vector_contador);
+var
+    i:integer;
+begin  
+    for i:= 1 to 4 do begin
+        ve[i]:=0;
+    end
+end;
+
+procedure leer_todo(var v_ga:galaxia);
+var
+    i:integer;
+begin
+    for i:=1 to dimf do begin
+        leer_galaxias(ga);
+    end;
+end;
+
+procedure maximos(ga:galaxia; var max, max_1, max_2:integer; var nmax1, nmax2:string);
+var
+    i:integer; 
+begin
+    max_1:=0;
+    max_2:=0;
+    for i:=1 to dimf do begin
+        if (ga[i].masa> max_1) then begin
+            max_2:= max_1;
+            nmax2:=nmax1;
+            max_1:ga[i].masa;
+            nmax1:=ga[i].nombre;
+        end
+        else
+        begin
+            if(ga[i].masa> max_2) then begin
+                max_2:= ga[i].masa;
+                nmax2:=ga[i].nombre;
+            end;
+end;
+
+procedure minimos(ga:galaxia; var min_1, min_2:integer; var nmin1, nmin2:string);
+var
+    i:integer;
+begin
+    min_1:=9999;
+    min_2:=9999;
+    for i:=1 to dimf do begin
+        if (ga[i].masa> min_1) then begin
+            min_2:= min_1;
+            nmin2:=nmin1;
+            min_1:ga[i].masa;
+            nmin1:=ga[i].nombre;
+        end
+        else
+        begin
+            if(ga[i].masa> min_2) then begin
+                min_2:= ga[i].masa;
+                nmin2:=ga[i].nombre;
+            end;
+end;
+
+end
