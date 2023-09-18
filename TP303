@@ -1,0 +1,63 @@
+program eje3;
+const
+  unesco=23.435;
+type
+    escuela=record
+        cue:integer
+        nombre:string;
+        cant_docentes:integer;
+        cant_alumnos:integer;
+        localidad:string;
+    end;
+
+procedure leer(var e:escuela);
+begin  
+    writeln('Ingrese el cue de la escuela');
+    readln(e.cue);
+    writeln('Ingrese el nombre de la escuela');
+    readln(e.nombre);
+    writeln('Ingrese la cantidad de docentes');
+    readln(e.cant_docentes);
+    writeln('Ingrese la cantidad de alumnos');
+    readln(e.cant_alumnos);
+    writeln('Ingrese la localidad');
+    readln(e.localidad);
+end;
+
+function re_doc_alu(esc:escuela):real;
+begin
+    re_doc_alu:=esc.cant_docentes/esc.cant_alumnos;
+end;
+
+procedure maximos (esc:escuela;var max1,max2:real;var nom1,nom2:string);
+var 
+    remax1,remax2:real;
+begin   
+    remax1:=0;
+    remax2:=0;
+    if (re_doc_alu(esc)>remax1) then begin
+        remax2:=remax1;
+        remax1:=re_doc_alu(esc);
+        nom2:=nom1;
+        nom1:=esc.nombre;
+    end
+    else
+        if (re_doc_alu(esc)>remax2) then begin
+            remax2:=re_doc_alu(esc);
+            nom2:=esc.nombre;
+        end;
+    end;
+end;
+
+var
+    e:escuela;
+    max1,max2:real;
+    nom1,nom2:string;
+begin
+    max1:=0;
+    max2:=0;
+    leer(e);
+    maximos(e,max1,max2,nom1,nom2);
+    writeln('La escuela con mayor relacion docente alumno es ',nom1,' con una relacion de ',max1);
+    writeln('La escuela con segunda mayor relacion docente alumno es ',nom2,' con una relacion de ',max2);
+end.
