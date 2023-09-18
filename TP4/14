@@ -1,0 +1,93 @@
+program eje14;
+const
+  dimF = 1000;
+type    
+    codigos=1..dimF;
+    roles=1..5;
+
+    participante=record
+        pais:string;
+        codigo:codigos;
+        nombre:string;
+        rol:roles;
+        cant:_horas_trab:real;
+    end;
+
+    vector=array[codigos]of participante;
+
+procedure leer_participante(var p:participante,dimf:integer);
+begin
+    writeln('Ingrese el codigo del participante');
+    readln(p.codigo);
+        while(p.codigo<>-1)do begin
+            writeln('Ingrese el pais del participante');
+            readln(p.pais);
+            writeln('Ingrese el nombre del participante');
+            readln(p.nombre);
+            writeln('Ingrese el rol del participante');
+            readln(p.rol);
+            writeln('Ingrese la cantidad de horas trabajadas');
+            readln(p.cant_horas_trab);
+        end;
+end;
+
+procedure inicializar_vector(var v:vector);
+var
+    i:integer;
+begin  
+    for i:= 1 to dimF do begin
+        v[i]:=0;
+    end;
+end
+
+procedure cargar_categorias(var v:vector);
+var
+    i:integer
+    mt:real;  
+begin
+    writeln(Rol 1:'Analista Funcional');
+    writeln(Rol 2:'Programador');
+    writeln(Rol 3:'Administrador de bases de datos');
+    writeln(Rol 4:'Arquitecto de software');
+    writeln(Rol 5:'Administrador de redes y seguridad');
+    mt:=0;    
+    case rol of
+        1:  mt := mt + v[i].horas_trabajadas*35.20;
+        2:  mt := mt + v[i].horas_trabajadas]*27.45;
+        3:  mt := mt + v[i].horas_trabajadas*32.03;
+        4:  mt := mt + v[i].horas_trabajadas*44.28;
+        5:  mt := mt + v[i].horas_trabajadas*39.87;
+    end;
+end;
+
+procedure cargar_vectro(var v:vector);
+var
+    p:participante;
+    i:integer;
+begin  
+    for i:= 1 to dimF do begin
+        leer_participante(p);
+        v[i]:=p;
+    end;    
+end;    
+procedure monto_invertido(pa:string;v:vector, var monto_inv:real);
+var 
+    i:integer;
+begin  
+    monto_inv:=0;
+    if(v[i].pais='argentina')then begin
+        monto_inv:=monto_inv+v[i].cant_horas_trab*
+
+
+
+
+
+var
+    v:vector
+begin
+    inicializar_vector(v);
+    cargar_vector(v);
+    leer_participante(p);
+    while(p.codigo<>-1) do begin
+        leer_participante(p);
+    end;
