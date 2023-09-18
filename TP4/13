@@ -1,0 +1,32 @@
+
+program ejersicio13;
+const
+    dimF = 50; //cantidad de años
+type
+    medicion=record     //registro para el punto a
+        anio:integer;
+        zona:integer;
+        temp:real;
+    end;
+
+    vector = array [1..dimF] of medicion;   /////////vector para el punto a guardar mediciones por año(anio,zona,temp)
+    vector2 = array [1..dimF] of real;      /////////vector para el punto b guardar temperaturas por año(temp promedio)
+
+procedure leer_Medicion(var m:medicion);    //procedimiento para leer mediciones
+begin  
+    writeln('ingrese año');
+    readln(m.anio);
+    writeln('ingrese zona');
+    readln(m.zona);
+    writeln('ingrese temperatura');
+    readln(m.temp);
+end;
+
+procedure inicializar_vector(var v:vector); //procedimiento para inicializar vector
+var
+    i:integer;
+begin  
+    for i:=1 to dimF do begin   
+     v[i]:=0;
+    end;
+end;
