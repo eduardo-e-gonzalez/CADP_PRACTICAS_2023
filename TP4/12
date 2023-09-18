@@ -1,4 +1,4 @@
-///////////////EN PROGRESO/////////////////
+
 program eje12;
 const
     dimf=53;
@@ -26,7 +26,7 @@ begin
     readln(ga.distancia);
 end;
 
-procedure inicializar_vbector(var ve:vector_contador);
+procedure inicializar_vector(var ve:vector_contador);
 var
     i:integer;
 begin  
@@ -86,4 +86,62 @@ begin
             end;
 end;
 
-end
+program no_irregulares(ga:galaxia; var cant_no_irregulares:integer);
+var
+    i:integer;
+begin
+    cant_no_irregulares:=0;
+    for i:=1 to dimf do begin
+        if (ga[i].tipo<>4) and(ga[i].distancia) then begin
+            cant_no_irregulares:=cant_no_irregulares+1;
+        end;
+    end;
+end;     
+
+program cant_galaxias(ga:galaxia; var ve:vector_contador);
+var
+    i:integer;
+begin
+    if 1 to dimf do begin
+        case ga[i].tipo of
+            1: ve[1]:=v[1]+1;
+            2: ve[2]:=v[2]+1;
+            3: ve[3]:=v[3]+1;
+            4: ve[4]:=v[4]+1;
+        end;    
+    end
+end;
+
+var
+    ga:galaxia;
+    cant_no_irregulares:integer;
+    ve:vector_contador;
+    min_1, min_2, max_1, max_2:integer;
+    nmin1, nmin2, nmax1, nmax2:string;
+    masa_acumulada, masa_acumulada_3:real;
+begin
+    masa_acumulada_3:=0;
+    masa_acumulada:=0;
+    leer_galaxias(ga);
+    inicializar_vector(ve);
+    leer_todo(ga);
+    for i:= 1 to 4 do begin
+        if(ve[i]>0) then begin
+            masa_acumulada:=masa_acumulada+ve[i].masa;
+            cant_galaxias(ga,ve);
+            writeln('El tipo de galaxia ',ve[i].tipo,' tiene ', ve[i],' galaxias');
+        end;
+    end;
+    if (ga.nombre='via lactea')or(ga.nombre='andromeda')or(ga.nombre=triangulo)and(ga.diswstancia<1000) then begin
+        masa_acumulada_3:=masa_acumulada_3+ga.masa;
+    end;
+    no_irregulares(ga,cant_no_irregulares);
+    maximos(ga,max_1, max_2, nmax1, nmax2);
+    minimos(ga,min_1, min_2, nmin1, nmin2);
+    writeln('La masa acumulada de las galaxias tipo 3 es ',masa_acumulada_3);
+    writeln('La masa acumulada de todas las galaxias es ',masa_acumulada);
+    writeln('el porcentaje de las tres galaxias principales con respecto al total es de ', (masa_acumulada_3*100)/masa_acumulada);
+    writeln('La cantidad de galaxias no irregulares a menos de 1000pc es ',cant_no_irregulares);
+    writeln('La galaxia con mayor masa es ',nmax1,' con ',max_1);
+    writeln('La galaxia con segunda mayor masa es ',nmax2,' con ',max_2);
+end.
