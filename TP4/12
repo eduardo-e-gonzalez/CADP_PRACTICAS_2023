@@ -35,12 +35,13 @@ begin
     end
 end;
 
-procedure leer_todo(var v_ga:galaxia);
+procedure leer_todo(var v:vector);
 var
-    i:integer;
+    i:integer;ga:galaxia;
 begin
     for i:=1 to dimf do begin
         leer_galaxias(ga);
+        v[i]:=ga;
     end;
 end;
 
