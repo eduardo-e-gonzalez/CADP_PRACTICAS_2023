@@ -1,93 +1,78 @@
-program eje14;
+2. Realice un programa que resuelva los siguientes incisos:
+a. Lea nombres de alumnos y los almacene en un vector de a lo sumo 500 elementos. La lectura finaliza
+cuando se lee el nombre ‘ZZZ’, que no debe procesarse.
+b. Lea un nombre y elimine la primera ocurrencia de dicho nombre en el vector.
+c. Lea un nombre y lo inserte en la posición 4 del vector.
+d. Lea un nombre y lo agregue al e.
+Nota: Realizar todas las validaciones necesarias.
+
+program ejercicio2;
 const
-  dimF = 1000;
+  dimF = 500;
 type    
-    codigos=1..dimF;
-    roles=1..5;
+    vector = array [1..dimF] of string; 
 
-    participante=record
-        pais:string;
-        codigo:codigos;
-        nombre:string;
-        rol:roles;
-        cant:_horas_trab:real;
-    end;
-
-    vector=array[codigos]of participante;
-
-procedure leer_participante(var p:participante,dimf:integer);
-begin
-    writeln('Ingrese el codigo del participante');
-    readln(p.codigo);
-        while(p.codigo<>-1)do begin
-            writeln('Ingrese el pais del participante');
-            readln(p.pais);
-            writeln('Ingrese el nombre del participante');
-            readln(p.nombre);
-            writeln('Ingrese el rol del participante');
-            readln(p.rol);
-            writeln('Ingrese la cantidad de horas trabajadas');
-            readln(p.cant_horas_trab);
-        end;
-end;
-
-procedure inicializar_vector(var v:vector);
-var
-    i:integer;
-begin  
-    for i:= 1 to dimF do begin
-        v[i]:=0;
-    end;
-end
-
-procedure cargar_categorias(var v:vector);
-var
-    i:integer
-    mt:real;  
-begin
-    writeln(Rol 1:'Analista Funcional');
-    writeln(Rol 2:'Programador');
-    writeln(Rol 3:'Administrador de bases de datos');
-    writeln(Rol 4:'Arquitecto de software');
-    writeln(Rol 5:'Administrador de redes y seguridad');
-    mt:=0;    
-    case rol of
-        1:  mt := mt + v[i].horas_trabajadas*35.20;
-        2:  mt := mt + v[i].horas_trabajadas]*27.45;
-        3:  mt := mt + v[i].horas_trabajadas*32.03;
-        4:  mt := mt + v[i].horas_trabajadas*44.28;
-        5:  mt := mt + v[i].horas_trabajadas*39.87;
-    end;
-end;
-
-procedure cargar_vectro(var v:vector);
-var
-    p:participante;
-    i:integer;
-begin  
-    for i:= 1 to dimF do begin
-        leer_participante(p);
-        v[i]:=p;
-    end;    
-end;    
-procedure monto_invertido(pa:string;v:vector, var monto_inv:real);
+procedure leer_cargar(var v:vector; var dimL:integer);
 var 
-    i:integer;
-begin  
-    monto_inv:=0;
-    if(v[i].pais='argentina')then begin
-        monto_inv:=monto_inv+v[i].cant_horas_trab*
-
-
-
-
-
-var
-    v:vector
+    nombre:string;
 begin
-    inicializar_vector(v);
-    cargar_vector(v);
-    leer_participante(p);
-    while(p.codigo<>-1) do begin
-        leer_participante(p);
+  writeln('Ingrese un nombre');
+  readln(nombre);
+  while (nombre <> 'ZZZ') and (dimL < dimF) do begin
+    dimL:= dimL + 1;
+    v[dimL]:= nombre;
+    writeln('Ingrese un nombre');
+    readln(nombre);
+  end;
+end;
+
+procedure eliminar_primera_ocurrencia(var v:vector; var dimL:integer; nombre:string);       
+var
+    i:integer;  
+begin
+    i:= 1;
+    while (i <= dimL) and (v[i] <> nombre) do    //busca la primera ocurrencia del nombre
+        i:= i + 1;                              //pasa al siguiente elemento
+    if (i <= dimL) then begin
+        v[i]:= v[dimL];                         //copia el ultimo elemento en la posicion del elemento a eliminar
+        dimL:= dimL - 1;                        //disminuye la dimension logica
     end;
+end;
+
+procedure  insertar_nombre(var v:vector; var dimL:integer; nombre:string);
+var
+    i:integer;  
+begin   
+    if (dimL < dimF) then begin
+        dimL:= dimL + 1;                        //aumenta la dimension logica
+        for i:= dimL downto 4 do                //recorre el vector desde la ultima posicion hasta la posicion 4
+            v[i]:= v[i-1];                      //copia el elemento anterior en la posicion actual
+        v[4]:= nombre;                          //inserta el nombre en la posicion 4
+    end;
+end;
+
+procedure agregar_nombre(var v:vector; var dimL:integer; nombre:string);        
+begin
+    if (dimL < dimF) then begin
+        dimL:= dimL + 1;                        //aumenta la dimension logica
+        v[dimL]:= nombre;                       //agrega el nombre en la ultima posicion
+    end;
+end;
+
+// pp
+var 
+    nombre:string;
+    v:vector;  
+    dimL:integer;
+begin 
+    leer_cargar(v,dimL);
+    writeln('Ingrese el nombre que desea eliminar');
+    readln(nombre); 
+    eliminar_primera_ocurrencia(v,dimL,nombre);
+    writeln('Ingrese el nombre que desea insertar en la posicion 4');   
+    readln(nombre);
+    insertar_nombre(v,dimL,nombre);
+    writeln('Ingrese el nombre que desea agregar al vector');
+    readln(nombre); 
+    agregar_nombre(v,dimL,nombre);
+end.
