@@ -1,0 +1,98 @@
+//1. a. Dado un vector de enteros de a lo sumo 500 valores, realice un módulo que reciba dicho vector y un valor n 
+//y retorne si n se encuentra en el vector o no.
+//b. Modifique el módulo del inciso a. considerando ahora que el vector se encuentra ordenado de manera ascendente.
+
+program ejercicio1;
+const
+    dimF = 500;
+type
+    vector = array [1..dimF] of integer;
+
+procedure cargarVector(var v:vector; var dimL:integer);
+var
+    num:integer;    
+begin
+    dimL:=0;
+    readln(num);
+    while (num <> 0) and (dimL < dimF) do begin
+        dimL:=dimL+1;
+        v[dimL]:=num;
+        readln(num);
+    end;
+end;
+
+procedure recorrer(v:vector; dimL:integer; n:integer; var esta:boolean);
+var
+    i:integer;
+begin
+    esta:=false;
+    for i:=1 to dimL do 
+        if (v[i] = n) then
+            esta:=true;
+end;
+
+var
+    v:vector;
+    dimL, n:integer;
+    esta:boolean;
+begin
+    cargarVector(v, dimL);
+    readln(n);
+    recorrer(v, dimL, n, esta);
+    if (esta) then
+        writeln('El numero ', n, ' se encuentra en el vector')
+    else
+        writeln('El numero ', n, ' no se encuentra en el vector');
+end.
+
+b.
+program ejercicio1;
+const
+    dimF = 500;
+type
+    vector = array [1..dimF] of integer;
+
+procedure cargarVector(var v:vector; var dimL:integer);
+var
+    num:integer;    
+begin
+    dimL:=0;
+    readln(num);
+    while (num <> 0) and (dimL < dimF) do begin
+        dimL:=dimL+1;
+        v[dimL]:=num;
+        readln(num);
+    end;
+end;
+
+procedure ordenarVector(var v:vector; dimL:integer);
+var
+    i, j, aux:integer;  
+begin    
+    for i:=1 to dimL-1 do 
+        for j:=i+1 to dimL do 
+            if (v[i] > v[j]) then begin
+                aux:=v[i];
+                v[i]:=v[j];
+                v[j]:=aux;
+            end;
+end;
+
+var
+    v:vector;
+    dimL, n:integer;
+    esta:boolean;
+begin
+    cargarVector(v, dimL);
+    readln(n);
+    ordenarVector(v, dimL);
+end.
+
+
+
+
+
+
+
+
+
