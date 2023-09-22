@@ -1,0 +1,112 @@
+Una empresa de transporte de caudales desea optimizar el servicio que brinda a sus clientes. Para ello,
+cuenta con información sobre todos los viajes realizados durante el mes de marzo. De cada viaje se cuenta
+con la siguiente información: día del mes (de 1 a 31), monto de dinero transportado y distancia recorrida
+por el camión (medida en kilómetros).
+a. Realizar un programa que lea y almacene la información de los viajes (a lo sumo 200). La lectura finaliza
+cuando se ingresa una distancia recorrida igual a 0 km, que no debe procesarse.
+b. Realizar un módulo que reciba el vector generado en a) e informe:
+- El monto promedio transportado de los viajes realizados
+- La distancia recorrida y el día del mes en que se realizó el viaje que transportó menos dinero.
+- La cantidad de viajes realizados cada día del mes.
+c. Realizar un módulo que reciba el vector generado en a) y elimine todos los viajes cuya distancia
+recorrida sea igual a 100 km.
+Nota: para realizar el inciso b, el vector debe recorrerse una única vez.
+
+program eje3;
+const
+    dimF = 200;
+type
+    dias=1..31;
+    viajes = record
+        dia:dias;
+        monto: real;
+        distancia: integer;
+    end;
+vector = array [1..dimF] of viajes;
+
+prpcedure leerViaje(var v:viajes);
+begin
+    while (v.distancia <> 0) do begin 
+            write('Ingrese el dia del mes: ');
+            readln(dia);
+            write('Ingrese el monto transportado: ');
+            readln(monto);
+            write('Ingrese la distancia recorrida: ');
+            readln(distancia);
+        end;
+    end;
+end;
+
+procedure inicializarVector(var v:vector);
+var
+    i:integer;
+begin
+    for i:=1 to dimF do begin
+        v[i]:=0;
+    end;
+end;
+
+procedure cargarVector(var v:vector; var diml:integer);
+var
+    i,dimf:integer;
+begin
+    diml:=0;
+    for i:=1 to dimf do begin
+        leerViaje(v[i]);
+        while (diml<dimf) and (v[i].distancia <> 0) do begin
+            diml:=diml+1;
+            leerViaje(v[i]);
+        end; 
+    end;
+end;
+
+procedure incisob(v:vector; diml:integer);
+var
+    i:integer;
+    promedio:real;
+    mon_min:real;
+    diaMin:integer;
+    cant_por_dia:integer;
+begin
+    promedio:=0;
+    mon_min:=9999;
+    diaMin:=0;
+    dis_min:=9999;
+    cant_por_dia:=0;
+    for i:=1 to diml do begin
+        promedio:= promedio + v[i].monto;
+        if (v[i].monto<mont_min) then begin
+            mon_min:=v[i].monto;
+            diaMin:=v[i].dia;
+            diaMin:=v[i].distancia;
+        end;
+        cant_por_dia:=cant_por_dia+1;
+        writeln('La cantidad de viajes realizados cada dia del mes es: ',cant_por_dia);
+    end;
+    writeln('El monto promedio transportado de los viajes realizados es: ',promedio/diml);
+    writeln('La distancia recorrida y el dia del mes en que se realizo el viaje que transporto menos dinero es: ',diaMin,' y la distancia es: ',dis_min);
+end
+
+procedure eliminarViajes(var v:vector; var diml:integer);
+var
+    i,j:integer;
+begin
+   for i:=1 to diml do begin                ///recorro el vector
+        if (v[i].distancia=100) then begin  ///si la distancia es igual a 100
+            for j:= i+1 to diml do begin    ///recorro el vector desde la posicion siguiente a la que encontre la distancia igual a 100
+               v[i]:=v[j];                  ///y voy pisando los valores i=100, ahora j=i+1 y j=i
+            end;
+            diml:=diml-1;
+        end;
+    end;
+end;
+
+var
+    v:vector;
+    diml:integer;
+begin  
+    inicializarVector(v);
+    cargarVector(v,diml);
+    incisob(v,diml);
+    eliminarViajes(v,diml);
+end.
