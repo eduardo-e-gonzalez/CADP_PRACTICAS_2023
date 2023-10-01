@@ -1,0 +1,210 @@
+eje 6 y 7 son cooperativos////////////
+
+6. La Agencia Espacial Europea (ESA) está realizando un relevamiento de todas las sondas espaciales lanzadas
+al espacio en la última década. De cada sonda se conoce su nombre, duración estimada de la misión
+(cantidad de meses que permanecerá activa), el costo de construcción, el costo de mantenimiento mensual y
+rango del espectro electromagnético sobre el que realizará estudios. Dicho rango se divide en 7 categorías:
+1. radio; 2. microondas; 3.infrarrojo; 4. luz visible; 5. ultravioleta; 6. rayos X; 7. rayos gamma
+Realizar un programa que lea y almacene la información de todas las sondas espaciales. La lectura finaliza al
+ingresar la sonda llamada “GAIA”, que debe procesarse.
+Una vez finalizada la lectura, informar:
+    a. El nombre de la sonda más costosa (considerando su costo de construcción y de mantenimiento).
+    b. La cantidad de sondas que realizarán estudios en cada rango del espectro electromagnético.
+    c. La cantidad de sondas cuya duración estimada supera la duración promedio de todas las sondas. 
+    d. El nombre de las sondas cuyo costo de construcción supera el costo promedio entre todas las sondas.
+Nota: para resolver los incisos a), b), c) y d), la lista debe recorrerse la menor cantidad de veces posible
+
+7. El Programa Horizonte 2020 (H2020) de la Unión Europea ha publicado los criterios para financiar
+proyectos de investigación avanzada. Para los proyectos de sondas espaciales vistos en el ejercicio anterior, se
+han determinado los siguientes criterios:
+    - sólo se financiarán proyectos cuyo costo de mantenimiento no supere el costo de construcción.
+    - no se financiarán proyectos espaciales que analicen ondas de radio, ya que esto puede realizarse desde la
+superficie terrestre con grandes antenas.
+A partir de la información disponible de las sondas espaciales (la lista generada en ejercicio 6), implementar
+un programa que:
+
+a. Invoque un módulo que reciba la información de una sonda espacial, y retorne si cumple o no con los
+nuevos criterios H2020.
+
+b. Utilizando el módulo desarrollado en a) implemente un módulo que procese la lista de sondas de la ESA y
+retorne dos listados, uno con los proyectos que cumplen con los nuevos criterios y otro con aquellos que no
+los cumplen.
+
+c. Invoque a un módulo que reciba una lista de proyectos de sondas espaciales e informe la cantidad y el
+costo total (construcción y mantenimiento) de los proyectos que no serán financiados por H2020. Para ello,
+utilice el módulo realizado en b.
+
+program eje5;
+const
+    dimF = 7;
+type
+    sonda = record
+        nombre: string;
+        duracion: integer;
+        costoConstruccion: real;
+        costoMantenimiento: real;
+        rango: integer; 
+    end;
+
+        vector_sonda = array [1..dimF] of sonda;        ///sonda mas costosa, cant sondas por rango, cant sondas duracion
+        vactor_contador = array [1..dimF] of integer;   ///cant sondas costo construccion
+    
+    lista = ^nodo;
+    nodo=record
+        dato: sonda;
+        sig: lista;
+    end;
+
+procedure leerSonda(var son: sonda);
+begin
+    writeln('Ingrese el nombre de la sonda');
+    readln(son.nombre);
+    while (son.nombre <> 'GAIA') do
+        writeln('Ingrese el nombre de la sonda');
+        readln(son.nombre);
+        writeln('Ingrese la duracion de la sonda');
+        readln(son.duracion);
+        writeln('Ingrese el costo de construccion de la sonda');
+        readln(son.costoConstruccion);
+        writeln('Ingrese el costo de mantenimiento de la sonda');
+        readln(son.costoMantenimiento);
+        writeln('Ingrese el rango de la sonda');
+        readln(son.rango);
+    end;
+end
+
+procedure cargar_lista(var l: lista; son: sonda);
+var
+    nue: lista;
+begin
+    new(nue);
+    nue^.dato:=son;
+    nue^.sig:=lista; 
+    l:=nue;
+end;    
+
+procedure inicializar_vector(var v: vector_sonda);
+var
+    i: integer;
+begin
+    for i:= 1 to dimF do
+        v[i]:=0;
+end;
+
+procedure inicializar_vector(var v: vector_contador);
+var
+    i: integer;
+begin
+    for i:= 1 to dimF do
+        v[i]:=0;
+end;
+
+procedure recorrer_lista(l: lista; var v: vector_sonda; var v2: vector_contador);
+var
+    cant_sondas: integer;
+    cant_sondas_rango: integer;
+    nombre_sonda_costosa: string;
+    costo_sonda_costosa: real;
+    sondas_duracion: integer;
+    cant_sondas_duracion: integer;
+    promedio_duracion: integer;
+    nombre_sonda_costo_construccion: string;
+    costo_sonda_construccion: real;
+    promedio_costo_construccion: real;
+begin
+    cant_sondas:=0;
+    sondas_duracion:=0;
+    promedio_duracion:=0;
+    cant_sondas_duracion:=0;
+    costo_sonda_costo_construccion:=0;
+    promedio_costo_construccion:=0;
+    while (l<>nil) do begin                                 ///recorro la lista
+        cant_sondas:=cant_sondas+1;                         ///cant sondas total
+        sondas_duracion:=sondas_duracion+l^.dato.duracion;  ///duracion total
+        costo_sonda_construccion:=costo_sonda_construccion+l^.dato.costoConstruccion; ///costo construccion total
+        v[l^.dato.rango]:=v[l^.dato.rango]+1;               ///cant sondas por rango
+        if((l^.dato.costoConstruccion + l^.dato.mantenimiento) >costo_sonda_costosa) then begin
+            costo_sonda_costosa:=l^.dato.costoConstruccion;
+            nombre_sonda_costosa:=l^.dato.nombre;
+        end;
+        if(l^.dato.rango= v[l^.dato.rango]) then
+            cant_sondas_rango:=v[l^.dato.rango]+1; ///cant sondas por rango
+        end;
+        promedio_duracion:=sondas_duracion/cant_sondas; ///promedio duracion
+        if(l^.dato.duracion > promedio_duracion) then
+            cant_sondas_duracion:=cant_sondas_duracion+1; ///cant sondas duracion
+        if(l^.dato.costoConstruccion > promedio_costo_construccion) then begin
+            promedio_costo_construccion:=costo_sonda_costo_construccion/cant_sondas; ///promedio costo construccion
+            nombre_sonda_costo_construccion:=l^.dato.nombre; ///cant sondas costo construccion
+        end;
+        l:=l^.sig;
+    end;
+    promedio_construccion:=costo_sonda_costo_construccion/cant_sondas;
+    promedio_duracion:=sondas_duracion/cant_sondas;
+    writeln('El nombre de la sonda mas costosa es: ', nombre_sonda_costosa);
+    while (l<>nil) do begin
+        if (l^.dato.costoConstruccion > promedio_construccion) then begin
+        nombre_sonda_costo_construccion:=l^.dato.nombre; ///cant sondas costo construccion
+        writeln('La sonda ', l^.dato.nombre, ' tiene un costo de construccion mayor al promedio'); 
+        end;
+        l:=l^.sig;
+    end;
+    writeln('La cantidad de sondas que realizaran estudios en el rango ', i, ' es: ', v[i]);
+    writeln('La cantidad de sondas cuya duracion estimada supera la duracion promedio de todas las sondas es: ', cant_sondas_duracion); 
+    writeln('La cantidad de sondas que realizaran estudios en cada rango del espectro electromagnetico es: ', cant_sondas_rango);
+end;
+
+procedure criterios(var son: sonda; var cumple: boolean);
+begin
+    criterios:=(son.costoMantenimiento > son.costoConstruccion) and (son.rango <> 1);
+end;
+
+procedure procesar_lista(l: lista; var l2: lista; var l3: lista);
+var
+    cumple: boolean;
+    aux: lista;
+begin
+    while (l<>nil) do begin
+        criterio(l^.dato, cumple);
+        if (criterio(l^.dato, cumple)) then begin   ///si cumple los criterios lista 2
+            aux:=l;
+            l:=l^.sig;
+            aux^.sig:=l2;
+            l2:=aux;
+        end
+        else begin                                  ///si no cumple los criterios lista 3
+            aux:=l;
+            l:=l^.sig;
+            aux^.sig:=l3;
+            l3:=aux;
+        end;
+    end
+end;
+
+procedure no_financiado(l3:lista; var costo_total: real; var cant_sondas: integer);
+begin
+    while (l3<>nil) do begin
+        costo_total:=costo_total+l3^.dato.costoConstruccion+l3^.dato.costoMantenimiento;
+        cant_sondas:=cant_sondas+1;
+        l3:=l3^.sig;
+    end;
+    writeln('La cantidad de sondas que no seran financiadas por H2020 es: ', cant_sondas);
+    writeln('El costo total de las sondas que no seran financiadas por H2020 es: ', costo_total);
+end;
+
+var
+    l: lista;
+    son: sonda;
+    v: vector_sonda;
+    v2: vector_contador;
+begin
+    l:=nil;
+    leerSonda(son);
+    cargar_lista(l, son);
+    inicializar_vector(v);
+    inicializar_vector(v2);
+    recorrer_lista(l, v, v2);
+    procesar_lista(l, l2, l3);
+    no_financiado(l3, costo_total, cant_sondas);
+end.
+
