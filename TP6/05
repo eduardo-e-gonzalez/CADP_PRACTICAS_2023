@@ -1,0 +1,174 @@
+//Realizar un programa que lea y almacene la información de productos de un supermercado. De cada
+//producto se lee: código, descripción, stock actual, stock mínimo y precio. La lectura finaliza cuando se ingresa
+//el código -1, que no debe procesarse. Una vez leída y almacenada toda la información, calcular e informar:
+//a . Porcentaje de productos con stock actual por debajo de su stock mínimo.
+//b. Descripción de aquellos productos con código compuesto por al menos tres dígitos pares.
+//c. Código de los dos productos más económicos.
+
+program EJER5;
+const
+  dimF = 1000;
+ty pe
+    str20 = string[20];
+    
+    producto = record
+        codigo: integer;
+        descripcion: str20;
+        stockActual: integer;
+        stockMinimo: integer;
+        precio: real;
+    end;
+    
+    vector = array [1..dimF] of producto;
+    
+    lista = ^nodo;
+    nodo = record
+        dato: producto;
+        sig: lista;
+    end;
+
+procedure leerProducto(var p: producto);
+begin
+        writeln('Ingrese el codigo del producto');
+        readln(codigo);
+        if (codigo <> -1) then begin
+            writeln('Ingrese la descripcion del producto');
+            readln(descripcion);
+            writeln('Ingrese el stock actual del producto');
+            readln(stockActual);
+            writeln('Ingrese el stock minimo del producto');
+            readln(stockMinimo);
+            writeln('Ingrese el precio del producto');
+            readln(precio);
+        end;
+end;
+
+procedure cargarLista(var l: lista; p: producto);       //cargar lista ordenada por codigo
+var
+    ant, nue, act: lista;
+begin
+    new(nue);
+    nue^.dato := p;
+    act := l;
+    ant := l;
+    while (act <> nil) and (act^.dato.codigo < p.codigo) do begin
+        ant := act;
+        act := act^.sig;
+    end;
+    if (ant = act) then
+        l := nue
+    else
+        ant^.sig := nue;
+    nue^.sig := act;
+end;
+
+procedure cargar_lista (var l:lista);
+var
+    p: producto;
+begin
+    leerProducto(p);
+    while (p.codigo <> -1) and (dimL < dimF) do begin
+        cargarLista(l, p);
+        leerProducto(p);
+    end;
+end;
+// esto a eso
+        //procedure porcentajeStockMinimo(l:lista, var porcentaje:real);  q estamos recorriendo??? entonces???
+       // var
+       //     porcentaje: real;
+       //     contador: integer;
+      //  begin
+        //    contador := 0;
+         //   while (l <> nil) do begin
+           //     if (l^.stockActual < l^.stockMinimo) then 
+            //       contador := contador + 1;
+         //   end;
+     //       porcentaje := (contador * 100) / L^.dato.stockActual;	
+       // writeln('El porcentaje de productos con stock actual por debajo de su stock minimo es: ', porcentaje:2:2);
+       // end;
+
+//procedure descripcionCodigoPar(l:lista);   
+//begin
+  //  while (l <> nil) do begin
+    //    if (l^.codigo mod 2 = 0) then
+      //      writeln('La descripcion del producto con codigo par es: ', L^.descripcion);
+//    end;
+//end;
+
+//procedure dosProductosMasEconomicos(v: vector; dimL: integer);
+//var
+  //  i, pos1, pos2: integer;
+    //min1, min2: real;
+//begin  
+   // min1 := v[1].precio;
+//    min2 := v[2].precio;
+  //  pos1 := 1;
+    //pos2 := 2;
+//    for i := 3 to dimL do begin
+  //      if (v[i].precio < min1) then begin
+      //      min2 := min1;
+    //        pos2 := pos1;
+  //          min1 := v[i].precio;
+//            pos1 := i;
+    //    end
+  //      else
+//            if (v[i].precio < min2) then begin     
+            //  min2 := v[i].precio;
+      //          pos2 := i;
+    //      end;
+    //end;
+  //  writeln('Los dos productos mas economicos son: ', v[pos1].codigo, ' y ', v[pos2].codigo);
+//end;
+
+function paroimpar(codigo: integer): boolean;       
+var
+    contador: integer;
+begin
+    contador := 0;
+    while (codigo <> 0) and (contador < 3)  do begin
+        if (codigo mod 2 = 0) then
+            contador := contador + 1;
+        codigo:= codigo div 10;
+    end;   
+    paroimpar := (contador = 3);
+end;
+
+procedure recorrerLista(l:lista);   
+var
+    contador: integer;
+    pos1, pos2: integer;
+    min1, min2: real;
+begin
+    contador := 0;
+    min1 := 99999;
+    min2 := 99999;
+    while (l <> nil) do begin
+        if (l^.stockActual < l^.stockMinimo) then 
+            contador := contador + 1;
+        if (paroimpar(l^.codigo)) then
+            writeln('La descripcion del producto con codigo par es: ', l^.descripcion);
+        if (l^.precio < min1) then begin  
+            min2 := min1;
+            pos2 := pos1;
+            min1 := v[i].precio;
+            pos1 := i;
+        end
+        else
+            if (v[i].precio < min2) then begin
+                min2 := v[i].precio;
+                pos2 := i;
+            end;
+    end;
+    writeln('El porcentaje de productos con stock actual por debajo de su stock minimo es: ', (contador * 100) / L^.dato.stockActual:2:2); 
+    writeln('Los dos productos mas economicos son: ', pos1, ' y ', pos2);
+end;
+
+var
+    L:lista;
+begin
+    cargar_lista(L);
+    recorrerLista(L); //recorrer lista y hacer lo que pide el ejercicio
+   ESTA DENTRO DE RECORRER LISTA //  porcentajeStockMinimo(v, dimL);
+                                 //  descripcionCodigoPar(v, dimL);
+                                 //  dosProductosMasEconomicos(v, dimL);
+end.
