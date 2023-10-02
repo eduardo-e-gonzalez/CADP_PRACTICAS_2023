@@ -1,0 +1,95 @@
+Una empresa desarrolladora de juegos para teléfonos celulares con Android dispone de información de
+todos los dispositivos que poseen sus juegos instalados. De cada dispositivo se conoce la versión de Android
+instalada, el tamaño de la pantalla (en pulgadas) y la cantidad de memoria RAM que posee (medida en GB).
+La información disponible se encuentra ordenada por versión de Android. Realizar un programa que procese
+la información disponible de todos los dispositivos e informe:
+a. La cantidad de dispositivos para cada versión de Android.
+b. La cantidad de dispositivos con más de 3 GB de memoria y pantallas de a lo sumo a 5 pulgadas.
+c. El tamaño promedio de las pantallas de todos los dispositivos.
+
+program eje12;
+type
+    dispositivo = record
+        version : integer;
+        pantalla : real;
+        ram : real;
+    end;
+
+    lista=^nodo;	
+    nodo=record
+        dato:dispositivo;
+        sig:lista;
+    end;
+
+procedure leerDispositivo(var d:dispositivo);
+begin
+    writeln('Ingrese la version de Android');
+    readln(d.version);
+    writeln('Ingrese el tamaño de la pantalla');
+    readln(d.pantalla);
+    writeln('Ingrese la cantidad de memoria RAM');
+    readln(d.ram);
+end;
+
+procedure insertar_ordenado(var l:lista; d:dispositivo);
+var
+    ant,act,nue:lista;
+begin
+    new(nue)
+    nue^.dato:=d;               //cargo el nodo
+    ant:=nil;                   //inicializo los punteros
+    act:=nil;                   //inicializo los punteros
+    while(act<>nil)and(act^.dato.version>d.version)do begin //mientras no sea el final  y la version sea mayor 
+        ant:=act;               //muevo los punteros
+        act:=act^.sig;          //muevo los punteros
+    end
+        if(act=ant)then         //si es el primer nodo
+            l:=nue;             //lo cargo en la lista
+        end
+        else begin
+            ante^.sig:=nue;     //sino lo cargo antes del nodo actual
+        end
+        nue^.sig:=act;          //lo cargo al final
+    end;
+end.
+
+procedure recorrer_lista(l:lista);
+var
+    d:dispositivo;
+    cant_vers:integer;
+    version:integer;
+    totalPantallas:real;
+    cantDispositivos:integer;
+begin
+    version:=0;                                             //inicializo la version
+    cantDispositivos:=0;                                    //inicializo el contador
+    totalPantallas:=0;                                      //inicializo el contador
+    cantRequisitos:=0;                                      //inicializo el contador
+    leerDispositivo(d);                                     //leo los dispositivos
+    insertar_ordenado(l,d);                                 //los inserto ordenados
+    act:=l;                                                 //inicializo el puntero
+    while(l<>nil)do begin
+        version:=act^.dato.version;                             //guardo la version
+        cant_vers:=0,
+        while(act<>nil)and(version=l^.dato.version) do begin    //mientras no sea el final y se la misma version
+            cantDispositivos:=cantDispositivos+1;               //sumo al contador de dispositivos
+            totalPantallas:=totalPantallas+act^.dato.pantalla;  //sumo al contador  de pantallas
+            if(l^.dato.ram>3)and(l^.dato.pantalla<=5)then       //ram es mayor a 3 y la pantalla menor a 5
+                cantRequisitos:=cantRequisitos+1;               //sumo al contador de requisito
+            act:=act^.sig;                                      //muevo el puntero
+        end;
+        writeln('La cantidad de dispositivos para la version ',version,' es ',cant);
+        if(act<>nil)then
+            act:=act^.sig;
+    end;
+    writeln('La cantidad de dispositivos con mas de 3 GB de memoria y pantallas de a lo sumo 5 pulgadas es ',cantRequisitos);
+    writeln('El tamaño promedio de las pantallas de todos los dispositivos es ',totalPantallas/cantDispositivos);
+end;
+
+var
+    l:lista;
+begin
+    l:=nil;
+    recorrer_lista(l);
+end.
+        
