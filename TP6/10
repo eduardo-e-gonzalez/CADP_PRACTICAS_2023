@@ -1,0 +1,128 @@
+Una empresa de sistemas está desarrollando un software para organizar listas de espera de clientes. Su
+funcionamiento es muy sencillo: cuando un cliente ingresa al local, se registra su DNI y se le entrega un
+número (que es el siguiente al último número entregado). El cliente quedará esperando a ser llamado por su
+número, en cuyo caso sale de la lista de espera. Se pide:
+
+    a. Definir una estructura de datos apropiada para representar la lista de espera de clientes.
+    ///Creo una lista de espera de clientes, donde cada cliente tiene un DNI y un numero de espera
+
+    b. Implementar el módulo RecibirCliente, que recibe como parámetro el DNI del cliente y la lista de clientes
+en espera, asigna un número al cliente y retorna la lista de espera actualizada.
+    ///recibe DNI,asigna un numero al cliente y retorna la lista de espera actualizada
+
+    c. Implementar el módulo AtenderCliente, que recibe como parámetro la lista de clientes en espera, y retorna
+el número y DNI del cliente a ser atendido y la lista actualizada. El cliente atendido debe eliminarse de la lista
+de espera.
+    ///recibe la lista anterior y retorna el numero y DNI del cliente a ser atendido y la lista actualizada
+
+    d. Implementar un programa que simule la atención de los clientes. En dicho programa, primero llegarán
+todos los clientes juntos, se les dará un número de espera a cada uno de ellos, y luego se los atenderá de a
+uno por vez. El ingreso de clientes se realiza hasta que se lee el DNI 0, que no debe procesarse.
+    ///ingreso de clientes hasta que se lee el DNI 0, que no debe procesarse
+
+program ejercicio10;
+type
+    cliente = record
+        dni:integer;
+        numero:integer;
+    end;
+
+    lista = ^nodo;
+    nodo = record
+        dato:cliente;
+        sig:lista;
+    end;
+
+procedure leerCliente(var c:cliente);
+begin
+    writeln('Ingrese el DNI del cliente');
+    readln(c.dni);
+    if (c.dni <> 0) then
+        c.numero:=0;
+end;
+
+procedure agregar_atras(var l:lista; var ult:lista; cli:cliente);
+var
+    nue:lista;
+begin
+    new(nue)
+    nue^.dato:=cli;     
+    nue^.sig:=nil;
+    if(l=nil)then       //si la lista esta vacia
+        l:=nue;         //el primer elemento es el nuevo
+    end
+    else begin  
+        ult^.sig:=nue;  //sino, agrego el nuevo elemento al final(arriba)
+    end;
+    ult:=nue;           //y el ultimo elemento es el nuevo
+end;
+
+procedure eliminar(var l:lista; var ult:lista; cli:cliente);
+var
+    ant,act:lista;
+begin
+    ant:=l;
+    act:=l;
+    while(act<>nil)and(act^.dato.numero<>cli.numero)do
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if(act<>nil)then begin
+        if(ant=act)then
+            l:=act^.sig;
+        else
+            ant^.sig:=act^.sig;
+        end;
+        if(act=ult)then
+            ult:=ant;
+        end;
+        dispose(act);
+    end;
+end;
+
+procedure eliminar_el_primero(var l:lista; var ult:lista);
+var
+    aux:lista;
+begin
+    aux:=l;             //guardo el primer elemento en una variable auxiliar
+    l:=l^.sig;          //el primer elemento ahora es el siguiente
+    if(l=nil)then       //si la lista quedo vacia
+        ult:=nil;       //el ultimo elemento es nil
+    end;
+    dispose(aux);       //elimino el primer elemento
+end;
+
+
+
+procedure RecibirCliente(var l:lista; var ult:lista; cli:cliente);
+begin
+    cli.numero:=ult^.dato.numero+1; //le asigno un numero al cliente en el registro y lo agrego a la lista
+    agregar_atras(l,ult,cli);       //agrego el cliente a la lista------> nue,2,3,4,5...
+end;
+
+procedure AtenderCliente(var l:lista; var ult:lista; var cli:cliente);
+begin
+    cli:=l^.dato;       //el cliente a atender es el primero de la lista
+    writeln('El cliente a atender es el DNI ',cli.dni,' con el numero ',cli.numero);
+    eliminar_el_primero(l,ult);    //elimino el cliente de la lista
+    writeln('El proximo cliente a atender es el DNI ',l^.dato.dni,' con el numero ',l^.dato.numero);
+end;
+
+var
+    l:lista;
+    ult:lista;
+    cli:cliente;
+begin   
+    l:=nil;                         //lista vacia
+    ult:=nil;                       //como esta vacia, el ultimo elemento es nil
+    leerCliente(cli);               //leo el primer cliente
+    while(l^.dato.dni<0)do begin    //mientras el DNI sea distinto de 0    
+        RecibirCliente(l,ult,cli);  //recibo al cliente
+        leerCliente(cli);           //leo el siguiente cliente
+    end;
+    AtenderCliente(l,ult,cli);      //atender al primer cliente y lo elimino de la lista
+end.
+
+
+
+
