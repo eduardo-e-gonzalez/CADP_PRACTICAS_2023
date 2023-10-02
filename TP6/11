@@ -1,0 +1,106 @@
+11. La Facultad de Informática debe seleccionar los 10 egresados con mejor promedio a los que la UNLP les
+entregará el premio Joaquín V. González. De cada egresado se conoce su número de alumno, apellido y el
+promedio obtenido durante toda su carrera.
+Implementar un programa que:
+    a. Lea la información de todos los egresados, hasta ingresar el código 0, el cual no debe procesarse.
+    b. Una vez ingresada la información de los egresados, informe el apellido y número de alumno de los
+egresados que recibirán el premio. La información debe imprimirse ordenada según el promedio del egresado
+(de mayor a menor).
+
+program eje11;
+type
+    egresado=record
+        numero:integer;
+        apellido:=string;
+        promedio:=real;
+    end;
+
+    lista=^nodo
+    nodo:record
+        dato:egresado;
+        sig:lista;
+    end;
+
+    vector_egresados=array [1..10] of egresado;
+
+procedure leerEgresado(egre:egresado);
+begin
+    writeln('Ingrese numero')
+    readln(egre.numero);
+    while(egre.numero <> 0) do begin
+        writeln('Ingrese apellido')
+        readln(egre.apellido);
+        writeln('Ingrese promedio')
+        readln(egre.promedio);
+    end;
+end;
+
+procedure inicializarVector(var v:vector_egresados);
+var
+    i:integer;
+begin
+    for i:= 1 to 10 do
+        v[i]:=0;
+end;
+procedure insertar_ordenado(var l:lista; egre:egresado);
+var
+    ant,act,nue:lista;
+begin
+    new(nue);                   ///creo el nodo
+    nuev^.dato:=egre;           ///cargo el dato en el nodo
+    act:=l;                     ///act es el primer nodo
+    ant:=l;                     ///ant es el primer nodo
+    while(act<>nil)and(act^.dato.promedio>egre.promedio) do begin  ///mientras no llegue al final y el dato sea mayor al que quiero insertar
+        ant:=act;               ///ant es act
+        act:=act^.sig;          ///act es el siguiente nodo
+    end;
+        if (act=ant) then begin ///si act es el primer nodo
+            l:=nue;             ///el primer nodo es el que cree
+        end
+        else begin
+            ant^.sig:=nue;      ///el nodo anterior al que cree apunta al que cree
+        end;
+        nue^.sig:=act;          ///el nodo que cree apunta al siguiente nodo
+    end;    
+
+procedure agregar_10_al_vector(l:lista; egre:egresado; var v:vector_egresados);
+var
+    i:integer;
+begin
+    i:=1
+    while(l<>nil)and(i<=10) do begin    ///mientras no llegue al final y no haya cargado 10 egresados
+        v[i]:=egre.dato;                ///cargo el dato en el vector
+        l:=l^.sig;                      ///avanzo en la lista
+        i:=i+1;                         ///avanzo en el vector
+    end;
+end;
+procedur imprimir_vector(v:vector_egresados);
+var
+    i:integer;
+begin   
+    for i:=1 to 10 do begin
+        writeln('Apellido: ',v[i].apellido,' Numero: ',v[i].numero,'promedio: ',v[i].promedio);
+    end;
+end;
+
+procedure procesar_lista(var l:lista; var v:vector_egresados);
+var
+    egre:egresado;
+begin
+    inicializarVector(v);
+    leerEgresado(egre);
+    while(egre.numero <> 0) do begin
+        insertar_ordenado(l,egre);
+        leerEgresado(egre);
+    end;
+    agregar_10_al_vector(l,egre,v);
+    imprimir_vector(v);
+end;
+
+var 
+    l:lista;
+    v:vector_egresados;
+begin
+    l:=nil;
+    procesar_lista(l,v);
+end;
