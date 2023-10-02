@@ -1,0 +1,136 @@
+/////////////TERMINAR///////////////
+
+9. Utilizando el programa del ejercicio 1, realizar los siguientes módulos:
+    a. EstáOrdenada: recibe la lista como parámetro y retorna true 
+    si la misma se encuentra ordenada, o false en
+caso contrario.
+    b. Eliminar: recibe como parámetros la lista y un valor entero, y elimina dicho valor de la lista (si existe). Nota:
+la lista podría no estar ordenada.
+    c. Sublista: recibe como parámetros la lista L y dos valores enteros A y B, y retorna una nueva lista con todos
+los elementos de la lista L mayores que A y menores que B.
+    d. Modifique el módulo Sublista del inciso anterior, suponiendo que la lista L se encuentra ordenada de
+manera ascendente.
+    e. Modifique el módulo Sublista del inciso anterior, suponiendo que la lista L se encuentra ordenada de
+manera descendente.
+
+
+program JugamosConListas;
+type
+    lista = ^nodo;
+    nodo = record
+    num : integer;
+    sig : lista;
+end;
+
+procedure insertar_ordenado(var L : lista; v : integer);
+var
+    ant, act, nue: lista
+begin
+    new(nue);
+    nue^.dato := v;
+    act:=l;
+    ant:=l;
+    while(actual <> nil) and (actual^.dato < v) do begin
+        ant:=act;
+        act:=act^.sig;
+    if (act = ant) then begin
+        l:=nue
+    end
+    else begin
+        ant^.sig:=nue;
+    end;
+    nue^.sig:=act;
+end;
+
+function esta_ordenada(L: lista; var ordenada: boolean); ni idea como hacerlo//////////////
+var
+    ant, act: lista;
+begin
+    ant := L;
+    act := L^.sig;
+    ordenada := true;
+    if (L = nil) then begin     ///si la lista esta vacia
+    end;
+        if ant = nil then begin ///si la lista tiene un solo elemento
+        ordenada := true;       ///la lista esta ordenada
+    end;
+    while (act <> nil) and (ordenada) do begin  ///si la lista tiene mas de un elemento
+        if (ant^.dato > act^.dato) then         ///si el anterior es mayor al actual
+        ordenada := false;                      ///la lista no esta ordenada
+        ant := act;                             ///el anterior es el actual
+        act := act^.sig;                        ///el actual es el siguiente
+    end;
+end;
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+procedure armar_listas_criterios(l:lsta; var l2, l3: lista; A, B:integer );
+begin
+    while (l<>nil) do begin
+        if(l^.dato<A)then begin
+            insertar_ordenado(l2, l^.dato);
+        end
+        else begin
+            if(l^.dato>B)then begin
+                insertar_ordenado(l3, l^.dato);
+            end;
+        end;
+end;
+
+procedure armar_listas_criteriosB(l:lsta; var l2, l3: lista; A, B:integer );
+var
+    aux: lista;
+begin
+    aux:=l;                                         ///aux es la lista
+    while (aux<>nil) and (aux^.dato >A) do begin    ///si no es el primer elemento y el balor es mayor a A(8)
+        insertar_ordenado(l2, aux^.dato);           ///inserto en la lista 2
+        aux:=aux^.sig;                              ///avanzo en la lista   
+    end;
+    while (aux<>nil) and (aux^.dato <B) do begin     ///si no es el primer elemento y el balor es menor a B(5)
+        insertar_ordenado(l3, aux^.dato);            ///inserto en la lista 3
+        aux:=aux^.sig;                               ///avanzo en la lista
+    end;
+end;
+
+    
+
+procedure eliminar(var L : lista; v : integer);
+var
+    ant, act : lista;
+begin  
+    act:=l;                 ///act:=l;
+    ant:=l;                 ///ant:=l;
+    while (act <> nil) and (act^.dato <> v) do begin    ///si no es el primer elemento ni la lista esta vacia
+        ant:=act;                                       /// ant es el actual
+        act:=act^.sig;                                  /// act es el siguiente
+    end;
+    if (act <> nil) then begin                          ///si no es el ultimo elemento
+        if (act = ant) then begin                       ///si es el primer elemento
+            l:=l^.sig;                                  ///l es el siguiente
+        end
+        else begin      
+            ant^.sig:=act^.sig;                         ///el anterior apunta al siguiente de actual, actual es eliminado
+        end;
+        dispose(act);                                   /// elimino el elemento
+    end;
+end;
+
+
+
+
+
+var
+    pri : lista;
+    valor : integer;
+
+begin
+    pri := nil;
+    writeln(‘Ingrese un numero’);
+    read(valor);
+    while (valor <> 0) then begin
+        armarNodo(pri, valor);
+        writeln(‘Ingrese un numero’);
+        read(valor);
+    end;
+end;
+
+. . . { imprimir lista }
+end.
