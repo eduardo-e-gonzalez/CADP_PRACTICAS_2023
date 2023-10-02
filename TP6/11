@@ -42,7 +42,7 @@ begin
     for i:= 1 to 10 do
         v[i]:=0;
 end;
-procedure insertar_ordenado(var l:lista; egre:egresado);
+procedure insertar_ordenado(var l:lista; egre:egresado); /////COMO NO DICE QUE INSERTAR DEBEMOS USAR, USE ORDENADO Y ASI YQ TENGO LOS PRIMERO 10 PROMEDIO//////
 var
     ant,act,nue:lista;
 begin
