@@ -1,0 +1,112 @@
+13. El Portal de Revistas de la UNLP está estudiando el uso de sus sistemas de edición electrónica por parte de
+los usuarios. Para ello, se dispone de información sobre los 3600 usuarios que utilizan el portal. De cada
+usuario se conoce su email, su rol (1: Editor; 2. Autor; 3. Revisor; 4. Lector), revista en la que participa y
+cantidad de días desde el último acceso.
+    a. Imprimir el nombre de usuario y la cantidad de días desde el último acceso de todos los usuarios de la
+revista Económica. El listado debe ordenarse a partir de la cantidad de días desde el último acceso (orden
+ascendente).
+    b. Informar la cantidad de usuarios por cada rol para todas las revistas del portal.
+    c. Informar los emails de los dos usuarios que hace más tiempo que no ingresan al portal.
+
+program eje13;
+const
+    dimf=3600;
+type
+    roll=1..4;
+    usuario=record
+        email:string[30];
+        rol:roll; incluso 
+        revista:string[30];
+        dias:integer;
+    end;
+
+    vector_usuarios=array[1..dimf] of usuario;
+    vector_rol=array[rol] of integer;
+
+    lista=^nodo;
+    nodo=record
+        dato:usuario;
+        sig:lista;
+    end;
+
+
+operacio, donde guarda, operando(que le suma)
+procedure leerUsuarios(var u:usuario);///// se dispone
+
+procedure inicializarVector_rol(var v:vector_rol);  //se dispone?
+var
+    i:integer;
+begin   
+    for i:=1 to dimf do
+        v[i]:=0;
+end;
+
+incializarVector_usuarios(var v:vector_usuarios); ///// se dispone
+
+
+procedure insertar_ordenado(var l:lista; d:dispositivo);
+var
+    ant,act,nue:lista;
+begin
+    new(nue)
+    nue^.dato:=d;               //cargo el nodo
+    ant:=nil;                   //inicializo los punteros
+    act:=nil;                   //inicializo los punteros
+    while(act<>nil)and(act^.dato.dias<d.dias)do begin //mientras no sea el final  y los dias sean mas
+        ant:=act;               //muevo los punteros
+        act:=act^.sig;          //muevo los punteros
+    end
+        if(act=ant)then         //si es el primer nodo
+            l:=nue;             //lo cargo en la lista
+        end
+        else begin
+            ante^.sig:=nue;     //sino lo cargo antes del nodo actual
+        end
+        nue^.sig:=act;          //lo cargo al final
+end;
+
+procedure cargar_vector__rol(var v:vector_rol; l:lista);    //cargo el vector con la cantidad de usuarios por rol
+//se dispone
+
+procedure imprimir_vector_rol(v:vector_rol);                 //imprimo el vector
+var
+    i:integer;
+begin   
+    for i:=1 to 4 do
+        writeln('Rol ',i,': ',v[i]);                          //imprimo el rol y la cantidad de usuarios
+end;
+
+procedure dos_usuarios(l:lista);    //imprimo los dos usuarios que hace mas tiempo que no ingresan
+var
+    act:lista;
+begin
+    act:=l;
+    while(act^.sig<>nil)do begin    //mientras no sea el final 
+        act:=act^.sig;              //muevo el puntero
+    end;
+    writeln('El usuario con email ',act^.dato.email,' hace ',act^.dato.dias,' dias que no ingresa al portal');//imprimo el ultimo
+    act:=act^.sig;                  //muevo el puntero
+    writeln('El usuario con email ',act^.dato.email,' hace ',act^.dato.dias,' dias que no ingresa al portal');//imprimo el anteultimo
+end;
+procedure imprmir_todo(v:vector_usuarios);    //imprimo todo
+var
+    i:integer;  
+begin
+    for i:=1 to dimf do begin
+        if(v[i].revista='economica')then
+            writeln('Nombre: ',v[i].nombre,' Dias: ',v[i].dias);
+
+    end;
+end;
+//programa principal
+var 
+    v:vector_usuarios;
+    v_rol:vector_rol; 
+     
+begin   
+    inicializarVector_rol(v_rol);
+    inicializarVector_usuarios(v);//se dispone 
+    cargar_vector_rol(v_rol,l); //se dispone    
+    imprimir_vector_rol(v_rol); 
+    imprmir_todo(v);
+end;
