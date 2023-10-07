@@ -1,0 +1,129 @@
+14. La oficina de becas y subsidios desea optimizar los distintos tipos de ayuda financiera que se brinda a
+alumnos de la UNLP. Para ello, esta oficina cuenta con un registro detallado de todos los viajes realizados por
+una muestra de 1300 alumnos durante el mes de marzo. De cada viaje se conoce el código de alumno (entre
+1 y 1300), día del mes, Facultad a la que pertenece y medio de transporte (1. colectivo urbano; 2. colectivo
+interurbano; 3. tren universitario; 4. tren Roca; 5. bicicleta). Tener en cuenta que un alumno puede utilizar
+más de un medio de transporte en un mismo día.
+Además, esta oficina cuenta con una tabla con información sobre el precio de cada tipo de viaje.
+Realizar un programa que lea la información de los viajes de los alumnos y los almacene en una estructura de
+datos apropiada. La lectura finaliza al ingresarse el código de alumno -1, que no debe procesarse.
+Una vez finalizada la lectura, informar:
+a. La cantidad de alumnos que realizan más de 6 viajes por día
+b. La cantidad de alumnos que gastan en transporte más de $80 por día
+c. Los dos medios de transporte más utilizados.
+d. La cantidad de alumnos que combinan bicicleta con algún otro medio de transporte.
+
+program eje14;
+const
+    dias = 31;
+    facultades = 15;
+    medios = 5;
+    alumnos = 1300;
+type
+    alumno = record
+        codigo: integer;
+        dia: 1..dias;
+        facultad: 1..facultades;
+        medio: 1..medios;
+    end;
+
+vector_dias=array[1..dias] of integer;          //vector para contar la cantidad de viajes por dia
+vector_contador=array[1..medios] of integer;    //vector para contar la cantidad de alumnos que viajan por medio
+vector_precios=array[1..medios] of real;        //vector para guardar los precios de cada medio de transporte
+
+lista=^nodo;
+nodo=recorddato:alumno;
+    sig:lista;
+end;
+
+inicializar_vector_dias(var v:vector_dias);
+var
+    i:integer;
+begin
+    for i:=1 to dias dos
+        v[i]:=0;   
+end;
+
+inicializar_vector_transportes(var v:vector_transportes);
+var
+    i:integer;
+begin
+    for i:=1 to medios do
+        v[i]:=0;   
+end;
+
+procedure leer_alumno(var a:alumno);   
+begin
+    writeln('Ingrese el codigo del alumno');
+    readln(a.codigo);
+    while (a.codigo <> -1) do begin
+        writeln('Ingrese el dia del mes');
+        readln(a.dia);
+        writeln('Ingrese la facultad');
+        readln(a.facultad);
+        writeln('Ingrese el medio de transporte');
+        readln(a.medio);
+        writeln('Ingrese el codigo del alumno');
+        readln(a.codigo);
+    end;
+end;
+
+procedure cargar_lista(lista,a);
+var
+    nue:lista;
+begin
+    new(nue)
+    nue=dato;
+    nue^sig:=lista;
+    lista:=nue;
+end;
+
+recorrer_lista(l:lista);
+var
+    i:integer;
+    l:lista;
+    a:alumno;
+    vdia:vector_dias;
+    vc:vector_contador;
+    vp:vector_precios;
+    cant_mas_6,cant_gasto_mas_80:integer;
+    medioMax1, medioMax2:integer;
+    cant_alum_comb:integer;
+begin
+    inicializar_vector_dias(vdia);
+    inicializar_vector_transportes(vc);
+    cant_mas_6:=0;
+    cant_gasto_mas_80:=0;
+    gasto_trasporte:=0;
+    medioMax1:=0;
+    medioMax2:=0;
+    cant_alum_comb:=0;
+    leer_alumno(a);
+    while(l<>nil)do begin
+        while(a.codigo<>-1)do begin
+            if(a.codigo=l^.dato.codigo)then begin             //mientras sea el mismo alumno
+                vdia[a.dia]:=vdia[a.dia]+1;                   //cuento la cantidad de viajes por dia  
+                vc[a.medio]:=vc[a.medio]+1;                   //cuento la cantidad de alumnos que viajan por medio
+                gasto_trasporte:=gasto_trasporte+vp[a.medio]; //sumo el gasto en transporte
+            end;
+            if(vdia[a.dia]>6)then                         //si la cantidad de viajes por dia es mayor a 6
+                    cant_mas_6:=cant_mas_6+1;                 //cuento la cantidad de alumnos que viajan mas de 6 veces por dia
+                if(vp[a.medio]>80)then                  //si el gasto en transporte es mayor a 80
+                    cant_gasto_mas_80:=cant_gasto_mas_80+1; //cuento la cantidad de alumnos que gastan mas de 80
+                if(a.media<=4) and (a.medio=5) then     //si el medio de transporte es menor o igual a 4 y el medio es 5          
+                    cant_alum_comb:=cant_alum_comb+1;   //cuento la cantidad de alumnos que combinan bicicleta con algun otro medio
+                if(vc[a.medio]>vc[medioMax1])then begin //si la cantidad de alumnos que viajan por medio es mayor a la cantidad de alumnos que viajan por el medio maximo 1
+                    medioMax2:=medioMax1;               //guardo el medio maximo 1 en el medio maximo 2
+                    medioMax1:=a.medio;                 //guardo el medio actual en el medio maximo 1
+                end
+                else
+                    if(vc[a.medio]>vc[medioMax2])then  //si la cantidad de alumnos que viajan por medio es mayor a la cantidad de alumnos que viajan por el medio maximo 2
+                        medioMax2:=a.medio;             //guardo el medio actual en el medio maximo 2
+            end;
+            l:=l^.sig;
+        end;
+        writeln('La cantidad de alumnos que realizan mas de 6 viajes por dia es: ',cant_mas_6);
+        writeln('La cantidad de alumnos que gastan en transporte mas de $80 por dia es: ',cant_gasto_mas_80);
+        writeln('Los dos medios de transporte mas utilizados son: ',medioMax1,' y ',medioMax2);
+        writeln('La cantidad de alumnos que combinan bicicleta con algun otro medio de transporte es: ',cant_alum_comb);
+    end;
