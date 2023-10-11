@@ -1,0 +1,166 @@
+//Una productora nacional realiza un casting de personas para la selección de actores extras de una nueva película
+//para ello se debe leer y almacenar la información de las personas que desean participar de dicho casting. 
+//De cada persona se lee: DNI, apellido y nombre, edad y el código de género de actuación que prefiere
+//(1: drama, 2: romántico, 3: acción, 4: suspenso, 5: terror). 
+//La lectura finaliza cuando llega una persona con DNI 33555444, la cual debe procesarse.
+//Una vez finalizada la lectura de todas las personas, se pide:
+//a. Informar la cantidad de personas cuyo DNI contiene más dígitos pares que impares.
+//b. Informar los dos códigos de género más elegidos.
+//c. Realizar un módulo que reciba un DNI, lo busque y lo elimine de la estructura. El DNI puede no existir.
+//Invocar dicho módulo en el programa principal.
+
+program eje1_tp7;
+type
+    genero=1..5;
+    persona=record
+        dni:integer;
+        apellido:cadena;
+        nombre:cadena;
+        edad:integer;
+        cod_genero:genero;
+    end;
+
+    lista=^nodo
+        nodo:record;
+        dato:persona;
+        sig:lista;
+    end;
+
+    vector_cont_genero=array[genero]of integer;
+procedure inicializar_vector(var v:vector_cont_genero);
+var
+    i:integer;
+begin
+    for i:=1 to 5 do begin
+        v[i]:=0;
+    end;
+end;
+
+procedure leer_personas(var per:persona);
+begin
+    writeln('Ingrese el DNI');
+    readln(per.dni);
+    writeln('Ingrese el apellido');
+    readln(per.apellido);
+    writeln('Ingrese el nombre');
+    readln(per.nombre);
+    writeln('Ingrese la edad');
+    readln(per.edad);
+    writeln('Ingrese el codigo de genero');
+    readln(per.cod_genero);
+end;
+
+function mas_dig_pares(per:persona):boolean;
+var
+    dig,par, impar:integer;
+begin
+    par:=0
+    impar:=0;
+    per.dni:=dni
+    while(dni<>0)do begin           //mientras no sea 0 dni
+        dig:=per.dni mod 10;        //se obtiene el ultimo digito
+        if((dia mod 2)=0)then       //si es par
+            par:=par +1;            //se suma 1 a la cantidad de pares
+        else
+        begin
+            impar:=impar +1;        //si es impar se suma 1 a la cantidad de impares
+        end;
+        dni:=dni div 10;            //se divide el dni por 10 para obtener el siguiente digito
+    end;
+    if(par=impar)then               //si tiene la misma cantidad de digitos pares e impares
+        mas_dig_pares:=false        //no se considera
+    else                            //si tiene mas digitos pares que impares
+        if(par>impar)then           //se considera
+            mas_dig_pares:=true     //y se devuelve true
+        else
+            mas_dig_pares:=false;   //si tiene mas digitos impares que pares no se considera
+end;
+
+insertar_ordenado(var l:lista, per:persona);
+var
+    new, act, ant:lista;
+begin   
+    new(nue)
+    nue^.dato:=per;
+    ant:=l;
+    act:=l;
+    while(l<>nil) and (per.dani>l^.dato.dni)do begin    //mientras la lista no sea nula y el dni sea mayor al de la lista
+        ant:=act;                                       //se guarda el anterior en el actual
+        act:=act.sig;                                   //y el actual en el siguiente
+    end
+    if(ant=act)then begin                               //si el anterior es igual al actual
+        l:=nue;                                         //el nuevo es el primero
+    end     
+    else begin
+        ant^.sig=nue;                                   //si no el anterior apunta al nuevo
+    end
+    nue^.sig:=act;                                      //y el nuevo apunta al actual
+end;                                                    
+
+procedure eliminar_dni(var l:lista, dni:integer);
+var
+    act, ant:lista;
+begin
+    act:=l;
+    ant:=l;
+    whil (act<>nil) and(actuañ^.dato.dni<>dni)do begin  //mientras la lista no sea nula y el dni sea distinto al de la lista
+        ant:=act;                                       //se guarda el anterior en el actual
+        act:=act.sig;                                   //y el actual en el siguiente
+    end;
+    if(act<>nil)then begin                               //si el actual no es nulo
+        if(act=ant)then begin                            //si el actual es igual al anterior
+            l:=act.sig;                                  //el primero pasa a ser el siguiente
+        end
+        else begin
+            ant.sig:=act.sig;                            //si no el anterior apunta al siguiente
+        end;
+        dispose(act);                                   //se libera memoria
+    end;
+end;
+
+
+procedure recorrer_lista(l:lista);
+var
+    i:integer;
+    per:persona;    
+    gen_max1, gen_max2:genero;
+    vc:vector_cont_genero;
+    cant_pares:integer;
+begin
+    cant_pares:=0;
+    gen_max1:=1;
+    gen_max2:=1;
+    repeat                                          //se lee hasta que el dni sea 33555444
+        leer_personas(per);                         //se lee la persona
+        if(mas_dig_pares(per))then begin            //si tiene mas digitos pares que impares
+            cant_pares:=cant_pares +1;              //se suma 1 a la cantidad de personas con mas digitos pares que impares
+        end;        
+        vc[per.cod_genero]:=vc[per.cod_genero] +1;  //se suma 1 al vector de contadores de genero
+        insertar_ordenado(l, per);                  //se inserta la persona en la lista
+    until (per.dni=33555444);                       //hasta que el dni sea 33555444
+    writeln('La cantidad de personas con mas digitos pares que impares es: ', cant_pares);
+    for i:=1 to 5 do begin                          //se recorre el vector de contadores de genero
+        if(vc[i]>vc[gen_max1])then begin            //si el contador es mayor al primer genero mas elegido
+            gen_max2:=gen_max1;                     //el segundo genero mas elegido pasa a ser el primero
+            gen_max1:=i;                            //y el primero pasa a ser el contador
+        end
+        else
+            if(vc[i]>vc[gen_max2])then begin        //si el contador es mayor al segundo genero mas elegido
+                gen_max2:=i;                        //el segundo genero mas elegido pasa a ser el contador
+            end;
+    end;
+    writeln('Los dos generos mas elegidos son: ', gen_max1, ' y ', gen_max2);
+end;
+    
+var
+    l:lista;
+begin
+    l:=nil;
+    inicializar_vector(vc);
+    recorrer_lista(l);
+    writeln('Ingrese el dni a eliminar');
+    eliminar_dni(l);
+end.
+
+
+    
