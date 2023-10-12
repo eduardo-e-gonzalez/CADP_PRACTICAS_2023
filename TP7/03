@@ -1,0 +1,98 @@
+Una remisería dispone de información acerca de los viajes realizados durante el mes de mayo de 2020. 
+De cada viaje se conoce: número de viaje, código de auto, dirección de origen, dirección de destino y kilómetros recorridos durante el viaje.
+Esta información se encuentra ordenada por código de auto y para un mismo código de auto pueden existir 1 o más viajes. Se pide:
+a. Informar los dos códigos de auto que más kilómetros recorrieron.
+b. Generar una lista nueva con los viajes de más de 5 kilómetros recorridos, ordenada por número de viaje.
+
+program eje3_tp7;
+type
+    auto=record             ///se dispone.
+        codigo:integer;
+        km:real;
+    end;
+    viaje=record
+        num:integer;
+        cod:integer;
+        origen:string;
+        destino:string;
+        km:real;
+    end;
+
+    lista=^nodo;
+    nodo=record
+        dato:viaje;
+        sig:lista;
+    end;
+
+    procedure leerAuto(var a:auto); ///se dispone
+    procedure leerViaje(var v:viaje); ///se dispone
+    procedure insertarOrdenado(var l:lista; v:viaje); ///se dispone
+    procedure cargarLista(var l:lista); ///se dispone
+
+    procedure maximos(l:lista; var cod1,cod2:integer); ///a
+    var
+        aux:lista;                          ///auxiliares para recorrer la lista
+        maxkm1,maxkm2:auto;                 ///maximos de km
+        codAtual:integer;                   ///codigo de auto actual
+    begin
+        maxkm1:=0;
+        maxkm2:=0;
+        cod1:=0;
+        cod2:=0;
+        codAtual:=0;
+            codAtual:=l^.dato.cod;                                   ///guardo el codigo de auto actual
+            while(l<>nil) and (l^.dato.cod=codActual)do begin        ///mientras el codigo de auto sea el mismo
+                if(l^.dato.km>maxkm1)then begin
+                    maxkm2:=maxkm1;
+                    cod2:=cod1;
+                    maxkm1:=l^.dato.km;
+                    cod1:=l^.dato.cod;
+                end
+                else
+                    if(l^.dato.km>maxkm2)then begin
+                        maxkm2:=l^.dato.km;
+                        cod2:=l^.dato.cod;
+                    end;
+            end;
+            l:=l^.sig;
+    end;    
+
+    procedure insertarOrdenado(l:lista; var l2:lista; v:viaje);
+    var
+        ant,act,nue:lista;
+    begin
+        act:=l;
+        ant:=l;
+        while(act<>nil) and (act^.dato.num<v.num)do begin
+            ant:=act;
+            act:=act^.sig;
+        end;
+        if(ant=act)then
+            l2:=nue;
+        else
+            ant^.sig:=l2;
+        end
+        nue^.sig:=act;
+    end;
+
+    procedure cargarListaNuev(l:lista, var l2:lista, v:viaje);
+    begin
+        while(l<>nil)do begin
+            if(l^,dato.km>5)then
+                insertarOrdenado(l2,v);
+            l:=l^.sig;
+        end;
+    end;
+
+    var
+        l,l2:lista;
+        cod1,cod2:integer;
+    begin
+        l:=nil;
+        l2:=nil;
+        cargarLista(l);
+        maximos(l,cod1,cod2);
+        writeln('los codigos de auto que mas km recorrieron son: ',cod1,' y ',cod2);
+        cargarListaNuev(l,l2,v);
+    end.
+
