@@ -1,0 +1,51 @@
+INSERTAR ORDENADO
+...
+procedure insertarOrdenado(var l:lista; dato:integer); 
+var 
+    ant,act,nue:lista;
+begin
+    new(nue);
+    nue^.dato:=dato;
+    act:=l;
+    ant:=l;
+    while(act<>nil) and (act^.dato<dato) do begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if(ant=act) then
+        l:=nue
+    else
+        ant^.sig:=nue;
+    nue^.sig:=act;
+end;
+...
+///////////////////////////////////////////////////////////////////////////////////////
+INSERTAR ATRAS
+
+procedure insertarAtras(var l:lista; dato:integer);
+var
+    nue,act:lista;
+begin
+    new(nue);
+    nue^.dato:=dato;
+    nue^.sig:=nil;
+    if(l=nil) then
+        l:=nue
+    else begin
+        act^.sig:=nue;
+    end;
+    ult:=nue;
+end;
+
+///////////////////////////////////////////////////////////////////////////////////////
+INSERTAR ADELANTE
+
+procedure insertarAdelante(var l:lista; dato:integer);
+var
+    nue:lista;
+begin
+    new(nue);
+    nue^.dato:=dato;
+    nue^.sig:=l;
+    l:=nue;
+end;
