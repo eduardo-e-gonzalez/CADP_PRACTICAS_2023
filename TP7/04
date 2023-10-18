@@ -1,0 +1,53 @@
+4. Una maternidad dispone información sobre sus pacientes. De cada una se conoce: nombre, 
+apellido y peso registrado el primer día de cada semana de embarazo (a lo sumo 42). 
+La maternidad necesita un programa que analice esta información, determine e informe:
+a. Para cada embarazada, la semana con mayor aumento de peso.
+b. El aumento de peso total de cada embarazada durante el embarazo.
+
+program maternidad;
+type    
+    Vec_peso=array [1..42] of real;
+
+    embarazada = record
+        nombre: string;
+        apellido: string;
+        peso:Vec_peso;
+    end; 
+    lista = ^nodo;  
+    nodo = record
+        dato: embarazada;
+        sig: lista;
+    end;
+
+//procedimientos
+
+procedure cargarlista(var l:lista); //SE DISPONE
+
+
+procedure recorrido(l:lista);
+var
+    max, total: real;
+begin   
+    while (l <> nil) do begin
+        max:=-1;
+        total:=0;
+        for i:=1 to 42 do begin
+            if (l^.dato.peso[i] > max) then
+                max:=l^.dato.peso[i];
+            total:=total+l^.dato.peso[i];
+        end;
+        writeln('Embarazada: ',l^.dato.nombre,' ',l^.dato.apellido);
+        writeln('El aumento de peso total de ',l^.dato.nombre,' ',l^.dato.apellido,' es: ',total);
+        writeln('La semana con mayor aumento de peso de ',l^.dato.nombre,' ',l^.dato.apellido,' es: ',max);
+        l:=l^.sig;
+    end;
+  
+
+//programa principal
+var
+  l:lista
+begin
+    l:=nil;
+    cargarlista(l); //SE DISPONE
+    recorrido(l);
+ end.
