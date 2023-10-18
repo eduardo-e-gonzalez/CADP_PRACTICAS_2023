@@ -1,0 +1,171 @@
+Una empresa de transporte de cargas dispone de la información de su flota compuesta por 100 camiones.
+De cada camión se tiene: patente, año de fabricación y capacidad (peso máximo en toneladas que puede transportar).
+
+Realizar un programa que lea y almacene la información de los viajes realizados por la empresa. 
+De cada viaje se lee: código de viaje, código del camión que lo realizó (1..100), distancia en kilómetros
+recorrida, ciudad de destino, año en que se realizó el viaje y DNI del chofer. 
+
+La lectura finaliza cuando se lee el código de viaje -1.
+Una vez leída y almacenada la información, se pide:
+
+1. Informar la patente del camión que más kilómetros recorridos posee y la patente del camión que menos kilómetros recorridos posee.
+
+2. Informar la cantidad de viajes que se han realizado en camiones con capacidad mayor a 30,5 toneladas
+    y que posean una antigüedad mayor a 5 años al momento de realizar el viaje (año en que se realizó el viaje).
+
+3. Informar los códigos de los viajes realizados por choferes cuyo DNI tenga sólo dígitos impares.
+Nota: Los códigos de viaje no se repiten.
+
+
+program eje5;
+
+const;
+    dimF=100;
+
+type;
+
+    camion=record;
+        patente:string;
+        anio:integer;
+        capacidad:real;
+    end;
+
+    viaje=record;
+        codViaje:integer;
+        codCamion:integer;
+        distancia:real;
+        ciudad:string;
+        anio:integer;
+        dni:integer;
+    end;
+
+        lista=^nodo;
+        nodo=record;
+            dato:viaje;
+            sig:lista;
+        end;    
+
+    vectorCamion=array[1..dimF] of camion;  //se usa para el punto 1
+    vectorViaje=array[1..dimF] of viaje;    //se usa para el punto 2//no se si va
+
+    procedure leerViaje(var v:viaje)
+    begin
+        writeln('Ingrese el codigo de viaje');
+        readln(v.codViaje);
+        writeln('Ingrese el codigo del camion');
+        readln(v.codCamion);
+        writeln('Ingrese la distancia recorrida');
+        readln(v.distancia);
+        writeln('Ingrese la ciudad de destino');
+        readln(v.ciudad);
+        writeln('Ingrese el anio del viaje');
+        readln(v.anio);
+        writeln('Ingrese el DNI del chofer');
+        readln(v.dni);
+    end;
+
+    procedure crearlista(var l:lista; v:viaje);
+    var
+        nue:lista
+    begin
+        new(nue);
+        nue^.dato:=v;
+        nue^.sig:=l;
+        l:=nue;
+    end;
+
+    procedure cargarLista(var l:lista); 
+    var
+        v:viaje;
+    begin
+        leerViajes(v);
+        while(v.codViaje<>-1)do
+            crearlista(l,v);
+            leerViajes(v);
+        end;
+    end;
+
+    Procedure MaxyMin(v:viajes; var maxPatente, minPatente:string);
+    var 
+        MaxKm, MinKm:real;
+    begin
+        MaxKm:=0;
+        MinKm:=99999;
+        if(v.distancia>MaxKm)then begin
+            MaxKm:=v.distancia;
+            maxPatente:=v.patente;
+        end;
+        if(v.distancia<MinKm)then begin
+            MinKm:=v.distncia;
+            minPatente:=v.patente;
+        end;
+    end;
+
+    function cumple(anioCamion, anioViaje:integer):boolean;
+    begin
+        cumple:=((anioViaje-anioCamion)>5)
+    end;
+
+    procedure CantViajes(vc:vectorCamion; v:viaje; var cant:integer);
+    var
+        i:integer;
+    begin
+        cant:=0;
+        for i:=1 to dimF do begin
+            if(vc(i).capacidad>30.5)and(cumple(c.anio,vc[i].anio))then
+                cant:=cant +1;
+        end;
+    end;
+
+    //3. Informar los códigos de los viajes realizados por choferes cuyo DNI tenga sólo dígitos impares.
+    Nota: Los códigos de viaje no se repiten.
+
+    function cumpleNDNI(dni:integer):boolean;
+    var
+        par, impar,dig:integer;
+    begin
+        while(dni<>0)do begin
+            dig:=dni mod 10;
+            if((dig mod 2)=0)then
+                par:=par+1
+            else
+                impar:=impar+1;
+            dni:=dni div 10;
+        end;
+        cumpleNDNI:=(par=0)and(impar>0);
+    end;
+
+
+    procedure codigosViajes(dni:integer; codigo:integer);
+    begin
+        if(cumple(v.dni))then
+            writeln(El codigo ´,codigo,' fue realizado por un chofer con DNI impar');
+        end;
+    end;
+
+    procedure recorrerLista(l:lista);
+    var
+        vCamion:vactorCamion;
+        maxPatente, minPatente:string;
+        MaxKm, MinKm:real;
+        cant:integer;
+    begin
+        l:=nil;
+        cargarLista(l);
+        while(l<>nil) do begin
+            MaxyMin(v,maxPatente, minPatente,MaxKm, MinKm);
+            CantViajes(vc,v,cant);
+            codigosViajes(l^.dato.dni,l^.dato.codViaje);
+            l:=l^.sig;
+        end;
+        writeln('La patente del camion con mas kilometros es: ',maxPatente);
+        writeln('La patente del camion con menos kilometros es: ',minPatente);
+        writeln('La cantidad de viajes de camiones con capacidad mayor a 30.5 toneladas y antiguedad mayor a 5 anios es: ',cant);
+    end;
+
+var
+    vCamion(vectorCamion);
+    l:lista;
+begin
+    recorrerLista(l);
+end.
