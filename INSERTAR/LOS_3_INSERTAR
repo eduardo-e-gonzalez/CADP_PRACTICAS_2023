@@ -1,3 +1,17 @@
+INSERTAR NORMAL
+
+procedure insertar(var l:lista; dato:integer);
+var
+    nue:lista;
+begin
+    new(nue);
+    nue^.dato:=dato;
+    nue^.sig:=l;
+    l:=nue;
+end;
+
+///////////////////////////////////////////////////////////////////////////////////////
+
 INSERTAR ORDENADO
 ...
 procedure insertarOrdenado(var l:lista; dato:integer); 
