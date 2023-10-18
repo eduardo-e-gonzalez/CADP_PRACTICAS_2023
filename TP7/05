@@ -46,7 +46,6 @@ type;
         end;    
 
     vectorCamion=array[1..dimF] of camion;  //se usa para el punto 1
-    vectorViaje=array[1..dimF] of viaje;    //se usa para el punto 2//no se si va
 
     procedure leerViaje(var v:viaje)
     begin
