@@ -1,0 +1,202 @@
+7. La Facultad de Informática desea procesar la información de los alumnos que finalizaron la carrera de Analista Programador Universitario.
+ Para ello se deberá leer la información de cada alumno, a saber: número de alumno, apellido, nombres, dirección de correo electrónico, 
+ año de ingreso, año de egreso y las notas obtenidas en cada una de las 24 materias que aprobó (los aplazos no se registran).
+
+ 1. Realizar un módulo que lea y almacene la información de los alumnos hasta que se ingrese el alumno con número de alumno -1, el cual 
+  no debe procesarse. Las 24 notas correspondientes a cada alumno deben quedar ordenadas de forma descendente.
+
+ 2. Una vez leída y almacenada la información del inciso 1, se solicita calcular e informar:
+  a. El promedio de notas obtenido por cada alumno.
+
+  b. La cantidad de alumnos ingresantes 2012 cuyo número de alumno está compuesto únicamente por dígitos impares.
+
+  c. El apellido, nombres y dirección de correo electrónico de los dos alumnos que más rápido se recibieron (o sea, que tardaron menos años)
+
+ 3. Realizar un módulo que, dado un número de alumno leído desde teclado, lo busque y elimine de la estructura generada en el inciso 1. 
+  El alumno puede no existir.
+
+program ejer7;
+type
+    nota: array[1..24] of integer;
+    alumno = record
+        numAlumno: integer;
+        apellido: string;
+        nombre: string;
+        email: char;
+        anioIngreso: integer;
+        anioEgreso: integer;
+        notas: nota;     
+    end;
+
+    lista = ^nodo;
+    nodo = record
+        dato: alumno;
+        sig: lista;
+    end;
+
+//procedimientos y funciones
+
+procedure ordenarNotas(var n: nota;dl:integer);
+var
+    i, x :integer;
+begin
+    notas[1]:= nota;
+    for dl := 2 to 24 do begin                                  
+        i := 1;
+        while((i <= dl) and (nota < notas[i])) do 
+            i := i + 1;
+        for x := dl downto i + 1 do  
+            notas[x] := notas[x-1];
+        notas[i] := nota;
+    end;
+end;
+
+procedure materias(var m:nota); //debo entender lo que hace bien, por arriba lo entiendo
+var
+    i,num;dl: integer;                 
+begin
+    dl:=0;                              
+    for i:= 1 to 24 do begin
+        writeln('Ingrese la nota ', i);
+        readln(num);
+        dl:=dl+1;
+        ordenarNotas(m, num,dl);
+    end;
+end;
+
+procedure leerAlumno(var a: alumno);
+begin   
+    writeln('Ingrese el numero de alumno');
+    readln(a.numAlumno);
+    if (a.numAlumno <> -1) then begin
+        writeln('Ingrese el apellido');
+        readln(a.apellido);
+        writeln('Ingrese los nombres');
+        readln(a.nombre);
+        writeln('Ingrese el email');
+        readln(a.email);
+        writeln('Ingrese el anio de ingreso');
+        readln(a.anioIngreso);
+        writeln('Ingrese el anio de egreso');
+        readln(a.anioEgreso);
+        writeln('Ingrese las notas');
+        materias(a.notas);
+    end;
+end;
+
+procedure agregarAdelante(var l: lista; a: alumno);
+begin 
+    new(n);
+    n^.dato:= a;
+    n^.sig:= l;
+    l:= n;
+end;
+
+procedure cargarLista(var l: lista);
+var 
+    a: alumno;
+begin 
+    leerAlumno(a);
+    while (a.numAlumno<>-1)do begin
+        agregarAdelante(l,a);
+        leerAlumno(a);
+    end;
+end;
+
+procedure promedioNotas(m: nota); //punto 2A
+var
+    i, suma: integer;   
+begin
+    suma:=0;
+    for i:= 1 to 24 do begin
+        suma:= suma + m[i];
+    end;
+    writeln('El promedio de notas es: ', suma div 24);
+end;
+
+function numimpar(num: integer): boolean; //punto 2B
+var
+    dig: integer;
+    numim:boolean;
+begin
+    numim:= true;
+    while (num <> 0) and (numim) do begin
+        dig:= num mod 10;
+        if (dig mod 2 = 0) then begin
+            numim:= false;
+        end;
+        num:= num div 10;
+    end;
+    numimpar:= numim;
+end;
+
+procedure recorrido(l:lista);       
+var
+    cant: integer;  
+    min1, min2: integer;
+    apellidomin1, apellidomin2, nombremin1, nombremin2: string;
+    emailmin1, emailmin2: char;
+begin       
+    cant:=0;
+    min1:= 9999;
+    min2:= 9999;
+    while (l <> nil) do begin
+        promedioNotas(l^.dato.notas); //punto 2A
+        if (l^.dato.anioIngreso = 2012) and (numimpar(l^.dato.numAlumno)) then begin //punto 2B
+            cant:= cant + 1;
+        end;
+        if (l^.dato.anioEgreso-l^.dato.anioIngreso<min1) then begin //punto 2C
+            apellidomin2:= apellidomin1;
+            apellidomin1:= l^.dato.apellido;
+            nombremin2:= nombremin1;
+            nombremin1:= l^.dato.nombre;
+            emailmin2:= emailmin1;
+            emailmin1:= l^.dato.email;
+            min2:= min1;
+            min1:= l^.dato.anioEgreso-l^.dato.anioIngreso;
+        end
+        else if (l^.dato.anioEgreso-l^.dato.anioIngreso<min2) then begin
+            apellidomin2:= l^.dato.apellido;
+            nombremin2:= l^.dato.nombre;
+            emailmin2:= l^.dato.email;
+            min2:= l^.dato.anioEgreso-l^.dato.anioIngreso;
+        end;
+        l:= l^.sig;
+    end;    
+    writeln('La cantidad de alumnos ingresantes 2012 cuyo numero de alumno esta compuesto unicamente por digitos impares es: ', cant);
+
+end;
+
+procedure eliminarAlumno(var l: lista; num: integer);
+var
+    ant, act: lista;    
+begin
+    ant:= l;
+    act:= l;
+    while (act <> nil) and (act^.dato.numAlumno <> num) do begin
+        ant:= act;
+        act:= act^.sig;
+    end;
+    if (act <> nil) then begin
+        if (act = l) then begin
+            l:= l^.sig;
+        end
+        else begin
+            ant^.sig:= act^.sig;
+        end;
+        dispose(act);
+    end;
+end;
+
+//programa principal
+var
+    l: lista;   
+    num: integer;
+begin   
+    l:= nil;
+    cargarLista(l);
+    recorrido(l);
+    whiteln('Ingrese el numero de alumno a eliminar');
+    readln(num);
+    eliminarAlumno(l, num);
+end.
