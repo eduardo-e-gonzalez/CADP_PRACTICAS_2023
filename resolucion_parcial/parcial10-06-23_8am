@@ -1,0 +1,98 @@
+program parcial10-06-23;
+type
+    cod=1000..2500;
+    viajes=record
+        codAvion:cod;
+        anio:integer;
+        canPas:integer;
+        destino:string;
+    end;
+
+    viaj=record
+        cantpasAbordo
+
+    Vector_viajes=array [1000 to 2500]of integer; cant de viajes y cant de pasajeros abordo 
+
+    capacidad=array [1000 to 2500]of integer;       ///se dispone
+
+    lista=^nodo
+    nodo=record
+        dato:viajes;
+        sig:lista;
+    end;
+ 
+//////procedimientos/////   
+
+
+procedure inicializarVector(var v1,v2:Vector_viajes);
+var i:integer;
+begin
+    for i:= 1000 to 2500 do begin
+        v1[i]:=0;
+        v2[i]:=0;
+    end;
+end;
+
+procedure insertar(var l2:lista;v:viajes);
+var
+    nue:lista;
+begin
+    new(nue);
+    nue^.dato:=v;
+    nue^.sig:=l2;
+    l2:=nue;
+end;
+
+procedure maximo(vv:Vector_viajes;var codMax:cod;var cantMax:integer);
+var
+    i:cod;
+begin
+    cantMax:=0;
+    for i:= 1000 to 2500 do begin
+        if vv[i]>cantMax then begin
+            cantMax:=vv[i];
+            codMax:=i;
+        end;
+    end;
+end;    
+
+procedure imprimirPromedio(Viajes,Pasajeros:Vector_viajes);
+var i:integer
+begin 
+    for i:=1000 to 2500 do begin
+     writeln('el promedio del avion ', i ' es de: ', Pasajeros[i]/Viajes[i]);
+    end;
+end; 
+
+procedure recorrido(l:lista);
+var 
+    l2:lista;
+    vViaje,vPasajeros:Vector_viajes;
+    c:capacidad;
+    codMax,cantMax:integer;
+    
+begin
+    l2:= nil;
+    cantMax:=0;
+    inicializarVector(vViaje,vPasajeros);
+    while(l<>nil)do begin
+        vViaje[l^.dato.codAvion]=vViaje[l^.dato.codAvion]+1;                        //VIAJES POR AVION
+        vPasajeros[l^.dato.codAvion]=vPasajeros[l^.dato.codAvion]+l^.dato.canPas;   //PASAJEROS POR AVION
+        if ((l^.dato.anio mod 10)=0)and(l^.dato.destino='punta cana')and(c[l^.dato.codAvion]<l^.dato.canPas)then;   //PUNTO B
+            insertar(l2,l^.dato);                                                                                //PUNTO B, AGREGO EN LISTA      
+    end;
+    maximo(vv,codMax,cantMax);                                                                             //PUNTO A
+    writeln('el codigo de avion con mas viajes es: ',codMax,' con ',cantMax,' viajes');
+    imprimirPromedio(vViaje,vPasajeros);
+end;
+
+
+/////////////programa principal///////////
+    
+Var
+    l:lista;
+begin
+    l:=nil;
+    cargarLista(l);//se dispone
+    recorrido(l);
+end.
