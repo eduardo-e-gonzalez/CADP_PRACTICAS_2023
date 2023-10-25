@@ -1,0 +1,152 @@
+program par_segf_01_07_23_08am;
+type
+    gene=1..5;
+
+    sesion=record;
+        titulo:string;
+        artista:string;
+        genero:gene;
+        visualizacion:integer;
+    end;
+    vactor_genero=array[1..5]of integer;
+
+    lista=^nodo
+        dato:sesion;
+        sig:lista;
+    end;
+
+procedure Leersesion(var se:sesion);
+begin
+    writeln('Ingrese el titulo de la sesion');
+    readln(se.titulo);
+    writeln('Ingrese el artista de la sesion');
+    readln(se.artista);
+    writeln('Ingrese el genero de la sesion');
+    readln(se.genero);
+    writeln('Ingrese la visualizacion de la sesion');
+    readln(se.visualizacion);
+end;
+
+procedure inicializarVactor(var vg:vactor_genero);
+var
+    i:integer;
+begin
+    for i:=1 to 5 do
+        vg[i]:=0;
+end;
+
+procedure cargar(var se);
+begin
+    repeat
+        Leersesion(se);
+        agregarOrdenado(l,se);
+    until (se.artista="Peso Pluma);
+end;
+
+procedure agregarOrdenado(var l:lista; se:sesion);
+var
+    nue:lista;
+begin
+    new(nue);
+    nue^.dato:=se;
+    if (l=nil) or (l^.dato.artista>se.artista) then begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if(act=ant) then
+        l:=nue
+    else
+        ant^.sig:=nue;
+    end;
+    nue^.sig:=act;
+end;
+
+procedure maximo(vg:vactor_genero; var genMax1, genMax2:gene; var maxVisu1,maxVisu2:integer);
+var
+    i:gene;
+begin
+    maxVisu:=-1;
+    maxVisu2:=-1;
+    for i:= 1 to 5 do begin
+        if(vg[i]>maxVisu1)then begin
+            maxVisu2:=maxVisu1;
+            genMax2:=genMax1;
+            maxVisu1:=vg[i];
+            genMax1:=i;
+        end
+        else
+            if(vg[i]>maxVisu2)then begin
+                maxVisu2:=vg[i];
+                genMax2:=i;
+            end;
+        end;
+    end
+end;
+ 
+function cumple(vi:visualizacion):boolean;
+var
+    par,impar:integer
+begin   
+    par:=0;
+    impar:=0;
+    while(vi<>0) do begin
+        if(vi mod 10 mod 2 = 0)then
+            par:=par+1
+        else
+            impar:=impar+1;
+        vi:=vi div 10;
+    end;
+    cumple:=par=impar;
+end;
+
+procedure eliminar_puede_noexistir(var l:lista; titulo:string); eliminar ua sesiopn de la lista que puede no existir
+var
+    act,ant:lista;
+begin
+    act:=l;
+    ant:=l;
+    while(act<>nil)and(act^.dato.titulo<>titulo)do begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if(act<>nil)then begin
+        if(act=ant)then
+            l:=l^.sig
+        else
+            ant^.sig:=act^.sig;
+        dispose(act);
+    end;
+end;
+
+
+procedure procesar(l:lista);
+var
+    se:sesion;
+    vecGen:vactor_genero;
+    genMax,maxVisu:integer;
+    cantGenReg:integer;
+begin
+    inicializarVactor(vg)
+    cargar(se);
+    while(l<>nil)do begin 
+        vg[l^.dato.genero]:=vg[l^.dato.genero]+1;
+        if(l^.dato.genero=2)and(cumple(l^.dato))then begin     //si es genero 2 y cumple
+            cantGenReg:=cantGenReg+1;
+        end;
+        l:=l^.sig;
+    end;
+    maximo(vg,genMax,maxVisu);
+    writeln('El genero con mas visualizaciones es: ',genMax);
+    writeln('El genero con mas visualizaciones es: ',genMax2);
+    writeln('La cantidad de sesiones del genero 2 que cumplen es: ',cantGenReg);
+end;
+
+//////////////PROGRAMA PRINCIPAL///////////////
+Var
+    l:lista;
+begin
+    procesar(l)
+    writeln('Ingrese sesion a eliminar')
+    readln(se.titulo);
+    eliminar(l,se.titulo);
+end.
