@@ -1,0 +1,139 @@
+program 16-07-22_tema2;
+type
+    meses=1..12;
+    compra=record
+        monto:integer;
+        mes:meses;
+        cantKg:real;
+        nombre:string;
+    end;
+
+    vector_meses=array[meses] of integer;
+
+    lista=^nodo;
+        dato:compra;
+        sig:lista;
+    end;
+
+    procedure leerCompra(var c:compra);
+    begin
+        writeln('Ingrese el monto de la compra');
+        readln(c.monto);
+        writeln('Ingrese el mes de la compra');
+        readln(c.mes);
+        writeln('Ingrese la cantidad de kilos');
+        readln(c.cantKg);
+        writeln('Ingrese el nombre del frigorifico');
+        readln(c.nombre);
+    end;
+
+    procedure insertarOrdenado(var l:lista; c:compra);
+    var
+        ant,act,nue:lista;
+    begin
+        new(nue);
+        nue^.dato:=c;
+        act:=l; 
+        ant:=l;
+        while (act<>nil) and (act^.dato.mes<c.mes) do begin
+            ant:=act;
+            act:=act^.sig;
+        end;
+        if (ant=act) then
+            l:=nue
+        else
+            ant^.sig:=nue;
+        end;
+        nue^.sig:=act;
+    end;
+
+    procedure cargarcompras(var l:lista);
+    var
+        c:compra;
+    begin
+        repeat
+            leerCompra(c);
+            insertarOrdenado(l,c);
+        until (c.cantKg=100);
+    end;
+
+    procedure inicializarVector(var vm:vector_meses);
+    var
+        i:meses;
+    begin
+        for i:= 1 to 12 do
+            vm[i]:=0;
+    end;
+
+    procedure menorMeses(vm: vector_meses; var mesMin1,mesMin2:meses);
+    var
+        i, min1, min2:integer;
+    begin   
+        min1:=9999;
+        min2:=9999;
+        for i:=1 to 12 do begin
+            if (vm[i]<min1) then begin
+                min2:=min1;
+                min1:=vm[i];
+                mesMin2:=mesMin1;
+                mesMin1:=i;
+            end
+            else
+                if (vm[i]<min2) then begin
+                    min2:=vm[i];
+                    mesMin2:=i;
+                end;
+        end;
+    end;
+
+
+
+    procedure recorrido(l:lista);
+    var
+        vm:vector_meses;
+        totalCompras:integer;
+        totalMonto:real;
+        montoXfrigo:real;
+        mesMin1, mesMain2:meses;
+        promedio:real;
+        comprasSeptiembre:integer;
+    begin
+        inicializarVector(cm);
+        cargarcompras(l);
+        comprasSeptiembre:=-1;
+        montoSeptiembre:=-1;
+        totalCompras:=0;
+        totalMonto:=0;
+        mesMin1:=0;/////////
+        mesMin2:=0;/////////
+        nombreActual:=l^.dato.nombre;
+        while(l<>nil) and (l.dato.nombre=nombreActual)do begin
+            montoXfrigo:=0;
+            vm[l^.dato.mes]:=vm[l^.dato.mes]+1;             ///sumo al vector de compras del mes
+            montoXfrigo:=montoXfrigo+l^.dato.monto;         ///sumo al monto Xfrigo total
+            totalCompras:=totalCompras+1;                   ///sumo al total de compras
+            totalMonto:=totalMonto+montoXfrigo;             ///sumo al total de monto
+            if (l^.dato.mes=9) then begin
+                comprasSeptiembre:=comprasSeptiembre+1;
+                montoSeptiembre:=montoSeptiembre+l^.dato.monto;
+            end;
+            if(montoXfrigo>45000)then                       ///si el monto Xfrigo supera los 45000
+                writeln('El frigorifico ',nombreActual,' supera los 45000');
+            l:=l^.sig;
+        end;
+        menorMeses(vm,mesMin1,mesMin2);
+        writeln('El mes con menos compras es ',mesMin1,' con ',vm[mesMin1],' compras');
+        promedio:=totalMonto/totalCompras;
+        writeln('El promdio de Septiembre es ',promedio:2:2);   
+    end;
+          
+
+
+    /////////////////////////PROGRAMA PRINCIPAL/////////////////////////
+
+    Var
+        l:lista;  
+    begin
+        l:=nil;
+        recorrido(l);
+    end.
