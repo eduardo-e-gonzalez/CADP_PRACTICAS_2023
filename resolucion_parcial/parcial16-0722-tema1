@@ -1,0 +1,129 @@
+program 16-0722-tema1;
+type
+    meses=1..12;
+    compra=record
+        monto:real;
+        mes:meses;
+        cantProductos:integer;
+        provedor:string;
+    end
+
+    lista=^nodo
+    nodo=record
+        dato:compra;
+        sig:lista;
+    end
+
+    vector_meses= array[meses] of real;
+
+procedure leercompra(var c:compra);
+begin
+    writeln('Ingrese el monto de la compra');
+    readln(c.monto);
+    if(c.monto<-1>) then begin
+        writeln('Ingrese el mes de la compra');
+        readln(c.mes);
+        writeln('Ingrese la cantidad de productos');
+        readln(c.cantProductos);
+        writeln('Ingrese el nombre del provedor');
+        readln(c.provedor);
+end;
+
+procedure insertarOrdenado(var l:lista; c:compra);
+var
+    nue,act,ant:lista;
+begin
+    act:=l;
+    ant:=l;
+    while(act<>nil) and (act^.dato.probedor<c.provedor) do begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if (ant=act)then begin
+        l:=nue;
+    end
+    else begin
+        ant^.sig:=nue;
+    end;
+    nue^.sig:=act;
+end;
+
+procedure cargarCompra(var l:lista);
+var
+    c:compra;
+    new:lista;
+begin
+    leercompra(c);
+    while(c.monto<-1>) do begin
+        new:=lista(crearnodo(c));
+        insertarOrdenado(l,new);
+        leercompra(c);
+    end;
+end;
+
+
+procedure mayorMeses(vm:vector_meses; var mesmax1,mesmax2:integer; var max1comp,max2comp:real);
+var
+    i:integer;
+begin 
+    max1comp:=0;
+    max2comp:=0;
+    for i:=1 to 12 do begin
+        if(vm[i]>max1comp)then begin
+            max1comp:=vm[i];
+            mesmax1:=i;
+        end
+    else begin
+        if(vm[i]>max2comp)then begin
+            if(i<>mesmax1)then begin
+                max2comp:=vm[i];
+                mesmax2:=i;
+            end;
+        end;
+    end;
+end;
+
+procedure recorrido(l:lista);
+var
+    c:compra;
+    totalComJulio:integer;
+    monFactProv:integer;
+    montojulio:real;
+    mesmax1, mesmax2:integer;
+    max1comp,max2comp:real;
+    montototal:real;
+    vec:vector_meses;
+    proveActual:string;
+    promedio:real;
+begin      
+    max1comp:=0;
+    max2comp:=0;
+    totalComJulio:=0;
+    montojulio:=0;
+    proveActual:=l^.dato.provedor;
+    while(l<>nil) do begin
+        ld:=l^.dato;
+        while(provedorActual=ld.provedor) do begin
+            monFactProv:=monFactProv+ld.monto;      //suma el monto de la compra al monto total del provedor
+            vm[ld.meses]:=vm[ld.mes]+1;             //suma 1 a la posicion del vector que corresponde al mes
+            if(ld.mes=7)then begin
+                montojulio:=montojulio+ld.monto;    //suma el monto de la compra al monto total de julio
+                totalComJulio:=totalComJulio+1;     //suma 1 a la cantidad de compras de julio
+            end;
+            l:=l^.sig;
+        end;
+        mayorMeses(vm,mesmax1,mesmax2);
+        writeln('El provedor ',ld.provedor,' realizo ',monFactProv,' en el mes ',mesmax1,' y ',mesmax2);
+        promedio:=montojulio/totalComJulio;
+        writeln('El promedio de compras de julio es ',promedio:2:2);
+        end;
+
+///////////////PROGRAMA PRINCIPAL/////////////////////
+
+Var
+    l:lista;
+begin
+    l:=nil;
+    cargarCompra(l);
+    recorrido(l);
+end.
