@@ -1,0 +1,123 @@
+La cátedra de CADP necesita un programa para generar el listado de alumnos ingresantes que rendirán el parcial
+Para e/lo, la cátedra DISPONE de un listado con todos alumnos que ingresaron este año a a la facultad
+De cada
+a/umno se conoce su DNI, nombre y apellido, nota obtenida en curso de ingreso (entre 4 Y 10), turno (entre 1 y 4) y
+si estuvo presente o ausente en cada una de las 12 clases de práctica
+a) Realizar un módulo que reciba la información de los alumnas y retorne una nueva estructura de datos que
+contenga só/o aquellos alumnos que podrán rendir el parcial. Para poder rendir el parcial, los alumnos deben
+contar con al menos 8 asistencias en las 12 clases de práctica.".
+b) Realizar un módu/o que reciba la estructura de datos generada en el inciso anterior, e IMPRIMA en pantalla
+1. Ape/ido y nombre y e/ DNI de los alumnos que hayan obtenido nota 8 o superior en el ingreso
+2. Turno con mayor cantidad de alumnos en condiciones de rendir el examen
+3. Cantidad de alumnos que no posean ningún digito cero en su DNI
+A.' Implementar el programa principal
+
+
+vector de 12 clases para saber cuantas estuvo presentes
+program 02-07-22_t1;
+type
+    notas=4..10;
+    turnos=1..4;
+
+    vector_asistencia[1..12] of turnos;
+    vector_turnos[1..4] of integer;
+    alumno=record
+        dni:integer;
+        nombre:string;
+        apellido:string;
+        nota: otas;
+        asistecia:presentes
+    end;
+
+    lista=^nodo
+    nodo=record
+        dato:alumno;
+        sig:lista;
+    end;
+
+procedure inicializarVector(var v:vector_turnos);
+var
+    i:integer;
+begin
+    for i:=1 to 4 do begin
+        v[i]:=0;
+    end;
+end;
+
+end;
+
+procedure cargar_alumno(var a:alumno);////SE DISPONE
+
+procedure insertar_en_lista(var l:lista; a:alumno);
+var
+    nue:lista;
+begin
+    new(nue);
+    nue^.dato:=a;
+    nue^.sig:=l;
+    l:=nue;
+end;
+
+procedure nuevaLista(l:lista, var l2:lista);// punto A
+begin   
+    While(l<>nil) do begin
+        if(l^.dato.asistecia>=8)then begin
+            insertar_en_lista(l2,l^.dato);
+        end;
+procedure cumpleDni(dni:integer):boolean;
+var
+    dig:integer;
+    cero:integer;
+begin
+    cero:=0;
+    while (dni<>0) do begin
+        dig:= dni mod 10;
+        if(dig=0)then 
+            cumpleDni:=false;
+        dni=dni div 10;
+    end;
+end;
+
+
+
+
+
+
+
+procedure recorer(l2:lista);
+var
+    a:alumno;
+    vt:vector_turnos
+    vp:vector_presentes;
+    maxTurno:turnos;
+    cantDni:integer;
+begin
+    inicializarVector(vt);
+    maxTurno:=0;
+    cantDni:=0;
+    while(l<>nil)do begin
+        ld:=l^.dato;
+        if (ld.nota=>8)then begin
+            writeln(ld.apellido,' ',ld.nombre,' ',ld.dni);
+        end;
+        vt[ld.turno]:=vt[ld.turno]+1;
+        if(vt[ld.turno]>maxTurno)then 
+            maxTurno:=vt[ld.turno];
+        if (cumpleDni(ld.dni))then 
+            cantDni:=cantDni+1;
+        l:=l^.sig;
+    end;
+    writeln('El turno con mas alumnos es: ',maxTurno);
+    writeln('La cantidad de alumnos que no poseen ningun digito cero en su dni es: ',cantDni);
+end;
+
+
+//////////////////////////PROGRAMA PRINCIPAL//////////////////////////
+
+Var
+    L:lista;
+begin   
+    L:=nil;
+    cargar_alumno(a);
+    recorer(l);
+end.
