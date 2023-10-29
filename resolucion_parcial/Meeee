@@ -1,0 +1,197 @@
+//resumen//
+
+datos: productora 100 eventos 
+cada evento  dispone info de:
+-nombre del evento
+-tipo de evento (1 musica, 2 cine, 3 obra de teatr, 4 unipersonal, 5 monologo)
+-lugar del evento
+-cantidad maxima permitidas en el evento
+-costo de entrada
+
+estructura de ventas: cada venta tiene
+-codigo de venta
+-numero de evento del 1 al 100
+-dni
+-cantidad de entradas
+lectura finaliza con cod -1
+
+/////empezamos///
+
+program parcial de mierda jajaja
+type 
+	event:1..5;
+
+	evento=record 
+		nombre:string;
+		tipo:event;
+		lugar:string;
+		cantidadmax:integer;
+		costoentrada:real;
+	end;
+
+	vectorinfo=array[1...100]of evento;
+	vectorsuma=array[1...100]of real;
+
+	numE:1..100;
+
+	venta=record
+		codigo:integer;
+		numEvento:numE;
+		dni:integer;
+		cant:integer;
+	end;
+	
+	lista=^nodo
+    	nodo=record
+        	dato:venta;
+        	sig:lista;
+    	end;
+
+
+/////PROCEDIMIENTOS///////
+
+
+procedure leer (var v:venta);
+begin
+	writeln(ingrese el codigo de venta);
+	readln(v.codigo);
+	if (v.codigo<>-1) then begin
+		writeln(ingrese un numero de evento entre el 1 y 100);
+		readln(v.numEvento);	
+		writeln(ingrese el DNI);
+		readln(v.dni);
+		writeln(ingrese la cantidad de entradas);
+		readln(v.cant);	
+	end;
+end;
+
+procedure insertar(var l:lista; dato:integer);
+var
+    nue:lista;
+begin
+    new(nue);
+    nue^.dato:=dato;
+    nue^.sig:=l;
+    l:=nue;
+end;
+
+procedure cargarLista(var l:lista);
+var
+	v:venta;
+begin
+	leer(v);
+	while (v.codigo<>-1) do begin 
+		insertar(l,v);
+		leer(v);	
+	end;
+end;
+
+procedure inicializarVector(var v:vector);
+var
+    i:integer;
+begin
+    for i:=1 to 100 do begin// 100 eventos?
+        v[i]:=0;
+    end;
+end;
+
+function parImpar(dni:integer):boolean;
+var
+    par,impar:integer
+begin   
+    par:=0;
+    impar:=0;
+    while(dni<>0) do begin
+        if(((dni mod 10) mod 2) = 0)then
+            par:=par+1
+        else
+            impar:=impar+1;
+        dni:=dni div 10;
+    end;
+    cumple:=par>impar;
+end;
+
+
+
+procedure recorrerLista(l:lista);
+var
+	cantEntradas:integer; //variable punto 2B
+	Vsuma:vectorsuma;  //punto 2A
+  min1, min2:integer;
+  nom1, nom1, lugar1, lugar2:string;
+	Vinfo:vectorinfo;  //se dispone 
+	cantEntradas50:integer; //variable punto2C
+
+begin
+  min1:=99999;
+  min2:=99999;
+	cantEntradas:=0;
+	inicializarVector(Vsuma);
+	cantEntradas50:=0;
+	while(l<>nil)do begin
+		//punto 2A
+		Vsuma[l^.dato.numEvento]:=Vsuma[l^.dato.numEvento]+(l^.dato.cant*Vinfo[l^.dato.numEvento].costoentrada); 
+		
+		//punto 2B
+		if(parImpar(l^.dato.dni) and (Vinfo[l^.dato.numEvento].tipo = 3) then 
+			cantEntradas:= cantEntradas+1;
+		
+		//punto 2C
+		if(l^.dato.numEvento=50) then
+			cantEntradas50:=cantEntradas50+1;
+
+
+
+		l:=l^.sig;
+
+	end;
+
+///declarar min1 min2 noom2 nom1 lugar1 lugar2
+
+	//punto 2A
+	for i:=1 to 100 do begin
+		if(Vsuma[i]<min1)then begin
+			min2:=min1;
+			nom2:=nom1;
+			lugar2:=lugar1;
+			min1:=Vsuma[i];
+			nom1:=Vinfo[i].nombre;
+			lugar1:=Vinfo[i].lugar;
+		end
+		else 
+			if(Vsuma[i]<min2)then begin
+				min2:=Vsuma[i];
+				nom2:=Vinfo[i].nombre;
+				lugar2:=Vinfo[i].lugar;
+
+			end;
+	end;
+
+	writeln('el nombre del primer evento con menos recaudacion fue ' , nom1 , ' y el lugar fue en ' , lugar1);
+	writeln('el nombre del segundo evento con menos recaudacion fue ' , nom2 , ' y el lugar fue en ' , lugar2);
+		
+	
+	// punto 2B
+	writeln('la cantidad de entradas vendidas de obras de teatro y dni con mas digitos pares que impares es ', cantEntradas);
+		
+	//punto 2C
+	if(cantEntradas50=Vinfo[50].cantidadmax)then
+		writeln('todas las entradas fueron vendidas');
+	else
+		writeln('no todas las entradas fueron vendidas');
+
+
+end;
+
+
+
+/////PROGRAMA PRINCIPAL/////
+
+
+var
+	l:lista;
+begin
+	l:=nil;
+	cargarLista(l);
+	recorrerLista(l);
+end.
