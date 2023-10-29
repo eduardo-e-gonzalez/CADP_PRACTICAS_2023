@@ -1,0 +1,137 @@
+program 15-06-2018;
+type
+    provincias=1..23;
+    estancias=record
+        codigoEstancia:integer;
+        localidad:string;
+        codigoProvincia:provincias;
+        cantGanado:integer;
+    end;
+
+    vectror_codigos=array[provincias] of integer;
+
+    lista=^nodo;
+    nodo=record
+        dato:estancias;
+        sig:lista;
+    end;
+
+procedure leerEstancia(var e:estancias);
+begin
+    writeln('Ingrese el codigo de estancia');
+    readln(e.codigoEstancia);
+    while(ecodigoEstancia<>0) do begin
+        writeln('Ingrese la localidad');
+        readln(e.localidad);
+        writeln('Ingrese el codigo de provincia');
+        readln(e.codigoProvincia);
+        writeln('Ingrese la cantidad de ganado');
+        readln(e.cantGanado);
+    end;
+end;
+
+procedure inseertarOrdenado(var l:lista; e:estancias);
+var
+    ant,act,nue:lista;
+begin
+    ant:=l;
+    act:=l;
+    new(nue);
+    if(l=nil) then begin
+        nue^.dato:=e;
+        nue^.sig:=l;
+        l:=nue;
+    end
+    else begin
+        while(act<>nil) and (act^.dato.codigoEstancia<e.codigoEstancia) do begin
+            ant:=act;
+            act:=act^.sig;
+        end;
+        if(act=ant) then begin
+            l:=nue;
+        else 
+            ant^.sig:=nue;
+        end;
+        nue^.dato:=e;
+    end;
+end;
+
+procedure cargarEstancias(var l:lista);
+var
+    e:estancias;
+begin
+    leerEstancia(e);
+    while(e.codigoEstancia<>0) do begin
+        insertarOrdenado(l,e);
+        leerEstancia(e);
+    end;
+end;
+
+procedure inicializarVector(var v:vector_codigos);
+var
+    i:integer;  
+begin
+    for i:=1 to 25 do begin
+        v[i]:=0;
+    end;
+end;
+
+procedure buscarEstancia(l:lista; codigo:integer);
+var
+    act,act:lista;
+    esta:boolean;
+begin
+    act:=l;
+    ant:=l;
+    while(act<>nil) and (act^.dato.codigoEstancia<>codigo) do begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if(act=ant) then begin
+        l:=act^.sig;
+    else 
+        ant^.sig:=act^.sig;
+    end;
+    if(esta:=act^.dato.codigoEstancia=codigo);
+        writeln('La estancia se encuentra en la lista');
+    else
+        writeln('La estancia no se encuentra en la lista');
+end;
+
+procedure recorrido(l:lista);
+var
+    v:vector_codigos;
+bagin
+    inicializarVector(v);
+    while(l<>nil) do begin
+    ld:=l^.dato
+        v[ld.codigoProvincia]:=v[localidad.codigoProvincia]+l^.dato.cantGanado;
+        l:=l^.sig;
+    end;
+end;
+
+procedure maximoGanado(vc:vector_codigos; var max:integer);
+var
+    i:provincias;
+begin
+    max:=0;
+    for i:= 1 to 25 do begin
+        if(vc[i]>max) then begin
+            max:=vc[i];
+        end;
+    end;
+end;
+
+
+//////////////PROGRAMA PRINCIPAL/////////////////////
+
+var
+    l:lista;
+begin
+    l:=nil;
+    cargarestancias(l);
+    recorrido(l);
+    buscarEstancia(l, codigo);
+    maximoGanado(l, max);
+    writeln('La provincia con mas ganado es: ', max);
+end.
