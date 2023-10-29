@@ -1,0 +1,105 @@
+Una panaderia de La Plata vende productos de olaboración propia. La panaderia agrupa sus productos en 26
+categorias (1. Pan; 2. Medialunas; 3, Masas finas; .).Para cada categoria se conoce nombre y precio por kilo.
+La panaderia dispone de la informắación de todas las compras realizadas en el útimo año. De cada compra se
+conoce: DNI del cliente, categoria del producto (ontre 1 y 26) y kgs de kilos comprados. La Información se
+encuentra ordenada por DNI del cliente
+a) Reallzar un módulo que retorne la información de lus categorias on una estructura de datos adocuada. La
+informacion se lee por teclado sin ningun orden. Do cada categoria se lee nombre, codigo (1 a 26) y preclo
+b) Realizar un môdulo que reciba la información de lodat las compyas y de las categorias, y retorne:
+1. DNI del clionte que más compras ha realizado
+2. Monto total recaudado por cada categoria.
+NOTA: Implementar el programa principal
+
+
+
+program ejercicio1;
+type
+    categorias = 1..26;
+    
+    producto = record
+        nombre: str20;
+        codigo: rango;
+        precio: real;
+    end;
+
+    venta = record
+        dni: integer;
+        codigo: rango;
+        kgs: integer;
+    end;
+
+    lista = ^nodo;
+    nodo = record
+        dato: producto; 
+        sig: lista;
+    end;
+    
+    vector_cat = array[categorias] of real; //vector de categorias no se si son dos talvez
+
+procwedure inicializarVector(var vp: vector_producto);
+var
+    i: integer;
+begin
+    for i:= 1 to 26 do
+        vp[i]:= 0;
+end;
+
+procedure crearlista(var l: lista, c:categoria);
+var
+    nue: lista;
+begin
+    new(nue);
+    nue^.dato:= c;
+    nue^.sig:= l;
+    l:= nue;
+end;
+procedure leerCategoria(var c: categoria);
+begin
+    writeln('Ingrese el nombre de la categoria');
+    readln(c.nombre);
+    writeln('Ingrese el codigo de la categoria');
+    readln(c.categoria);
+    writeln('Ingrese el precio de la categoria');
+    readln(c.precio);
+end;
+
+
+procedure recorrido(l:lista);
+var
+    i: integer;
+    vv: vector_cat;         //vector de ventas, suma recaudado por categoria
+    vc: vector_cat;         //precio por categoria
+    pro: producto;
+    ven: venta;
+    dniactual: integer;     //dni actual
+    dniMax: integer;        //dni maximo
+    maxComdni: integer;     //maxima kgs de compras por dni
+    maxcomp: integer;       //maxima kgs de compras
+    montoCat: real;         //monto total por categoria
+begin
+    inicializarVactor(vv);
+    maxComp:= -1;
+    montoCat:= 0;
+    dniMax:= -1;
+    dniActual:=l^.dato.dni;
+    while(l<>nil) do begin
+        ld:= l^.dato;
+        vc[ld.codigo]:= vc[ld.codigo] + ve.kgs*vc[ld.codigo].precio;        //sumo el precio de la categoria no se si esta bien me suena raro
+        while(dniActual = ld.dni) do begin                                  //mientras el dni sea el mismo
+            maxComDni:= maxComDni + ld.kgs*ld.precio;                       //compras por dni
+            if(maxComDni > maxComp) then begin
+                maxComp:= maxComDni;
+                dniMax:= dniActual;
+            end;
+            l:= l^.sig;
+        end;
+        if(maxComDni > maxComp) then begin                                  //si el dni actual es mayor al maximo
+            maxComp:= maxComDni;
+            dniMax:= dniActual;
+        end;
+        for i:= 1 to 26 do begin                                            //recorro el vector de categorias e imprimo                                                 
+            writeln('El monto total de la categoria ', i, ' es: ', vc[i]);
+        end;
+        writeln('El dni con mas compras es: ', dniMax);                     //imprimo el dni con mas compras
+    end;
+
