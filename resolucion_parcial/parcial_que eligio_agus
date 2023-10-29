@@ -20,7 +20,7 @@ procedure leerEstancia(var e:estancias);
 begin
     writeln('Ingrese el codigo de estancia');
     readln(e.codigoEstancia);
-    while(ecodigoEstancia<>0) do begin
+    if(e.codigoEstancia<>0) then begin
         writeln('Ingrese la localidad');
         readln(e.localidad);
         writeln('Ingrese el codigo de provincia');
@@ -131,7 +131,8 @@ begin
     l:=nil;
     cargarestancias(l);
     recorrido(l);
-    buscarEstancia(l, codigo);
+    writeln('estancia a buscar ' c.codigoEstancia=234);
+    buscarEstancia(l, l^.dato.codigo);
     maximoGanado(l, max);
     writeln('La provincia con mas ganado es: ', max);
 end.
