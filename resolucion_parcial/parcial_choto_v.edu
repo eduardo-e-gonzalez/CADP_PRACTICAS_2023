@@ -1,0 +1,149 @@
+Realizar un programa para una empresa productora que necesita organizar 100 evec_vntos culturales.De cada evec_vnto se
+dispone la siguiente información: nombre del evec_vnto, tipo de evec_vnto (1: música, 2: cine, 3: obra de teatro, 4: unipersonal y
+5: monólogo), lugar del evec_vnto, cantidad máxima de personas permitidas para el evec_vnto y costo de la entrada.Se pide:
+
+1. Generar una estructura con las vec_vntas de entradas para tales evec_vntos culturales.De cada vec_vnta se debe guardar:
+código de vec_vnta, número de evec_vnto (1.100), DNI del comprador y cantidad de eatradas adquiridas. La lectura de
+las vec_vntas finaliza con código de vec_vnta-1
+2. Una vec_vz leída y almacenada la información de las vec_vntas, calcular e informar:
+a ) El nombre y lugar de los dos evec_vntos que han tenido menos recaudación.
+b) La cantidad de entradas vec_vndidas cuyo comprador contiene en su DNI mas digitos o pares poles que que impares uparesy y que sean
+para el evec_vnto de tipo "obra de teatro"
+c) Si la cantidad de entradas vec_vndidas para el evec_vnto número 50 alcanzó la cantidad máxima de personas permitidas
+
+debo usar una lista?: si, porque no se cuantas vec_vntas voy a tener
+que incisos voy a responer con la lista?: 1a, 1b, 1c, 2a, 2b, 2c: 
+
+
+
+
+
+
+
+
+
+program eje;
+const
+  evec_vntos = 100;
+type
+    str20 = string[20];
+    rango = 1..5;
+    evec_vnto = record
+        nombre: str20;
+        tipo: rango;
+        lugar: str20;
+        cantMax: integer;
+        costo: real;
+    end;
+    vec_vnta = record
+        codvec_vnta: integer;
+        numEvec_vnto: integer;
+        dni: integer;
+        cantEntradas: integer;
+    end;
+   
+    vec_vctor_evec_vntos = array [1..evec_vntos] of evec_vnto;     ///vec_vctor de evec_vntos
+   
+    vec_vctor_vec_ventas = array [1..evec_vntosV] of vec_vnta;    ///vec_vctor de vec_vntas
+   
+    lista = ^nodo;
+    nodo = record
+        dato: vec_vnta;
+        sig: lista;
+    end;
+
+procedure leerEvec_vnto(var e: evec_vnto);
+begin
+    with e do begin
+        writeln('Ingrese el nombre del evec_vnto');
+        readln(nombre);
+        writeln('Ingrese el tipo de evec_vnto');
+        readln(tipo);
+        writeln('Ingrese el lugar del evec_vnto');
+        readln(lugar);
+        writeln('Ingrese la cantidad maxima de personas permitidas');
+        readln(cantMax);
+        writeln('Ingrese el costo de la entrada');
+        readln(costo);
+    end;
+end;
+
+procedure cargarevec_vnto(var l: lista);
+var 
+    vec_v: vec_vntas;
+begin
+    leerEvec_vnto(e);
+    while(vec_v.codvec_vnta <> -1) do begin
+        leervec_vnta(vec_v);
+        insertar_en_lista(l,vec_v);
+    end;
+end;
+
+procedure cargarvec_vctor(var v: vec_vctor);
+var
+    e: evec_vnto;
+    i: integer;
+begin
+    for i:=1 to evec_vntos do begin
+        leerEvec_vnto(e);
+        v[i]:=e;
+    end;
+end;
+
+procedure recorrido(l: lista);
+var
+    vec_v:vec_vntas
+    ev: evec_vnto;
+    vec_v: vec_vctor_evec_vntos;
+    vec_vctor_vec_vntas: vec_vctor_vec_vntas;
+    menorRec1, menorRec2: real;
+    nomM1, nomM2, lugarM1, lugarM2: str20;
+    cantEntradas, cantMax: integer;
+begin 
+    menorRec1:=9999;
+    menorRec2:=9999;
+    cantEntradas:=0;
+    cantEntradasDNI:=0;
+    cantMax:=0;  
+    inicializarvec_vctor(vec_v);
+    while(l<>nil)do begin   
+        ld:=l^.dato;
+        vec_v[ld.numEvec_vnto].recaudacion:=vec_v[ld.numEvec_vnto].recaudacion + (vec_v[ld.numEvec_vnto].costo * ld.cantEntradas); ///sumo la recaudacion de cada evec_vnto
+        if(vec_v[ld.numEvec_vnto].recaudacion < menorRec1)then begin  ///busco los dos evec_vntos con menor recaudacion
+            menorRec2:=menorRec1;
+            menorRec1:=vec_v[ld.numEvec_vnto].recaudacion;
+            nomM2:=nomM1;
+            nomM1:=vec_v[ld.numEvec_vnto].nombre;
+            lugarM2:=lugarM1;
+            lugarM1:=vec_v[ld.numEvec_vnto].lugar;
+        end
+        else
+            if(vec_v[ld.numEvec_vnto].recaudacion < menorRec2)then begin
+                menorRec2:=vec_v[ld.numEvec_vnto].recaudacion;
+                nomM2:=vec_v[ld.numEvec_vnto].nombre;
+                lugarM2:=vec_v[ld.numEvec_vnto].lugar;
+            end;
+        if(ld.numEvec_vnto = 50)then begin  ///sumo las entradas vec_vndidas para el evec_vnto 50
+            cantEntradas:=cantEntradas + ld.cantEntradas;       
+        if(ev.tipo = 3)and(cumpleDni(ev.dni))then
+            cantEntradasDNI:=cantEntradasDNI + ld.cantEntradas;   ///sumo entradas vec_vndidas para el evec_vnto 3 y que cumplan con el dni
+        l:=l^.sig;
+        if(cantEntradas = cantMax)then
+            writeln('Se alcanzo la cantidad maxima de personas permitidas para el evec_vnto 50');
+    end;
+    writeln('El nombre del evec_vnto con menor recaudacion es: ',nomM1);
+    writeln('El lugar del evec_vnto con menor recaudacion es: ',lugarM1);
+    writeln('El nombre del evec_vnto con segunda menor recaudacion es: ',nomM2);
+    writeln('El lugar del evec_vnto con segunda menor recaudacion es: ',lugarM2);
+
+       
+
+////////////PROGRAMA PRINCIPAL/////////////////////
+
+var
+    L: lista;
+begin
+    l:=nil;
+    cargarevec_vnto(l);
+    recorrido(l);
+end.
