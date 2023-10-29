@@ -1,0 +1,109 @@
+// empecemos//
+
+program parcial 15/6/2018
+type
+	prov=1..23;
+	estancia=record;
+		codE:integer;
+		localidad:string;
+		codP:prov;
+		cantganado:integer;
+	end;
+	
+	lista=^nodo
+	nodo=record
+		dato:estancia;
+		sig:lista;
+	end;
+	
+	
+	
+/////procedimientos///
+
+procedure leerEstancia(var e:estancia);
+begin
+	writeln('ingrese el codigo de la estancia');
+	readln(e.codE);
+	if(e.codE<>0)then begin
+		writeln('ingrese la localidad de la estancia');
+		readln(e.localidad);
+		writeln('ingrese el codigo de la provincia');
+		readln(e.codP);
+		writeln('ingrese la cantidad de ganado ');
+		readln(e.cantganado);
+	end;
+end;
+
+procedure insertar(var l:lista; e:estancia);
+var
+    nue:lista;
+begin
+    new(nue);
+    nue^.dato:=e;
+    nue^.sig:=l;
+    l:=nue;
+end;
+
+procedure cargarLista(var l:lista);// punto 1
+var 
+	e:estancia;
+begin 
+	leerEstancia(e);
+	while(e.codE<>0) do begin 
+		insertar(l,e);
+		leerEstancia(e);
+	end;
+end;
+
+function estaonoesta(l:lista):boolean;
+begin
+	while(l<>nil) and (l^.dato.codE<>234) do 
+		l:=l^.sig
+	if(l^.dato.codE=234)then 
+		estaonoesta:=true
+	else
+		estaonoesta:=false;
+end;
+
+procedure maximos(l:lista; var codmax1,codmax2:integer);
+var 
+	maxg1, maxg2:integer;
+begin
+	maxg1:=-1;
+	maxg2:=-1;
+	while(l<>nil)do begin
+		if(l^.dato.cantgando>maxg1)then begin
+			codmax2:=codmax1;
+			maxg2:=maxg1;
+			codmax1:=l^.dato.codE;
+			maxg1:=l^.dato.cantgando;
+		end
+		else
+			if(l^.dato.cantgando>maxg2)then begin
+				codmax2:=l^.dato.codE;
+				maxg2:=l^.dato.cantgando;
+			end;
+	end;
+end;
+
+/////PROGRAMA PRINCIPAL//////
+var 
+	l:lista;
+	cod1,cod2:integer;
+begin 	
+	l:=nil;
+
+///////// punto 1 /////////
+	cargarLista(l);   
+
+///////// punto 2 /////////
+	if(estaonoesta(l)=true) then
+		writeln  ('el codigo de estancia 234 se encontaraba en la lista')
+	else
+		writeln  ('el codigo de estancia 234 no se encontaraba en la lista');
+	
+///////// punto 3 /////////
+	maximos(l,cod1,cod2);
+	writeln('los dos codigos con mayor cantidad de cabezas de ganado son ', cod1, ' y ', cod2);
+
+end.
