@@ -16,7 +16,7 @@ type
 		sig:lista;
 	end;
 	
-	
+	vector=array[prov]of integer;
 	
 /////procedimientos///
 
@@ -65,23 +65,37 @@ begin
 		estaonoesta:=false;
 end;
 
+procedure inicializarVactor(var v:vector);
+var
+    i:integer;
+begin
+    for i:=1 to 23 do
+        v[i]:=0;
+end;
+
 procedure maximos(l:lista; var codmax1,codmax2:integer);
 var 
 	maxg1, maxg2:integer;
+	v:vector;
 begin
 	maxg1:=-1;
 	maxg2:=-1;
+	incializarVector(v);
 	while(l<>nil)do begin
-		if(l^.dato.cantgando>maxg1)then begin
+		v[l^.dato.codP]:= v[l^.dato.codP] + l^.dato.cantgando;
+		l:=l^.sig;
+	end;
+	for i := 1 to 23 do begin
+		if(v[i]>maxg1)then begin
 			codmax2:=codmax1;
 			maxg2:=maxg1;
-			codmax1:=l^.dato.codE;
-			maxg1:=l^.dato.cantgando;
+			codmax1:=i;
+			maxg1:=v[i];
 		end
 		else
-			if(l^.dato.cantgando>maxg2)then begin
-				codmax2:=l^.dato.codE;
-				maxg2:=l^.dato.cantgando;
+			if(v[i]>maxg2)then begin
+				codmax2:=i;
+				maxg2:=v[i];
 			end;
 	end;
 end;
@@ -104,6 +118,6 @@ begin
 	
 ///////// punto 3 /////////
 	maximos(l,cod1,cod2);
-	writeln('los dos codigos con mayor cantidad de cabezas de ganado son ', cod1, ' y ', cod2);
+	writeln('los dos codigos de las provincias con mayor cantidad de cabezas de ganado son ', cod1, ' y ', cod2);
 
 end.
