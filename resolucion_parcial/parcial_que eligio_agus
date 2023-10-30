@@ -56,7 +56,6 @@ procedure cargarEstancias(var l:lista);
 var
     e:estancias;
 begin
-    inicializarVactor(vp);
     leerEstancia(e);
     while(e.codigoEstancia<>0) do begin
         inseertarlista(l,e);
@@ -81,6 +80,7 @@ var
     i,max1, max2:integer;
     cantGanadoPro : vector_pro;
 begin
+    inicializarVactor(vp);
     max1:=-1;
     max2:=-1;
     while(l<>nil) do begin
