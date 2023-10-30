@@ -1,0 +1,154 @@
+// empecemos
+program parcial 15/7/23 tema 1
+type 
+	equi=1..28;
+	not=0..10;
+	clasif=array[1..27]of not
+	jugador=record
+		codigo:integer;
+		apellido:string;
+		nombre:string;
+		codEquipo:equi;
+		anionacimiento:integer;
+		clasificacion:clasif;
+	end;
+	lista=^nodo;
+	nodo =record 
+		dato:jugador;
+		sig:lista;
+	end;
+		
+	vector=array[equi]of integer
+
+
+////// PROCEDIMIENTOS//////
+
+procedure incializarVector(var v:vector);
+var
+	i:integer;
+begin
+	for i := 1 to 28 do 
+		v[i]:=0;
+end;
+
+function cumpleono(c:clasif):boolean; //parte del punto b mas de 14 partidos
+var
+	i,suma:integer;
+begin 
+	suma:=0;
+	for i :=1 to 27 do 
+		if(c[i]<>0))then 
+			suma:=suma+1;
+	if(suma>14) then
+		cumpleono:=true
+	else
+		cumpleono:=false;
+end;
+
+
+procedure recorrerLista(l);
+var
+	v:vector;
+	i,j, sumaProm:integer;
+	codmax1, codmax2: integer;
+	max1,max2:real;
+	vc:clasif
+begin
+	incializar(v);
+	max1, max2:= -1;
+	while(l<>nil) do begin
+		sumaProm:=0;
+		vc:=l^.dato.clasificacion;
+
+		//punto a
+		if(l^.dato.anionacimiento<1988) then 
+			v[l^.dato.codEquipo]:=v[l^.dato.codEquipo]+1;
+
+		//punto b
+		if(cumpleono(l^.dato.clasificacion)) then
+			for i:= 1 to 27 do begin
+				sumaProm:=sumaProm+vc[i];
+		if((sumaProm/27>max1)then begin
+			max2:=max1;
+			codmax2:=codmax1;
+			max1:=sumaProm/27;
+			codmax1:=l^.dato.codigo;
+		end
+		else
+			if((sumaProm/27>max2)then begin
+				max1:=sumaProm/27;
+				codmax1:=l^.dato.codigo;
+			end;
+		l:=l^.sig
+	end;
+
+	
+	///informar punto a
+
+	for j:=1 to 28 do 
+		writeln ('en el equipo ', j , ' hay ', v[j], ' jugadores mayores de 35 anios');
+
+	///informar punto b
+
+	writeln('los codigos de los jugadores son: ', codmax1, ' y ', codmax2);
+ 
+end;
+
+procedure insertarOrdenado(var l:lista; dato:jugador); 
+var 
+    ant,act,nue:lista;
+begin
+    new(nue);
+    nue^.dato:=dato;
+    act:=l;
+    ant:=l;
+    while(act<>nil) and (act^.dato.codigo<dato.codigo) do begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if(ant=act) then
+        l:=nue
+    else
+        ant^.sig:=nue;
+    nue^.sig:=act;
+end;
+
+
+function cumple(cod:integer):boolean;
+var
+    par,impar:integer
+begin   
+	par:=0;
+	impar:=0;
+	while(cod<>0)and (impar=3) do begin
+		if(cod mod 10 mod 2 = 0)then
+			par:=par+1
+		else
+			impar:=impar+1;
+		cod:=cod div 10;
+	end;
+	if(impar=3) then
+		cumple:=true
+	else
+		cumple:=false;
+end;
+
+
+procedure listaNueva(l:lista; var lNue:lista);// nacidos en del 83 al 90 cuyo codigo posee 3 digitos impares
+begin
+	while(l<>nil) do begin
+		if(cumple(l^.dato.codigo)) and (l^.dato.anionacimiento>1982) and (l^.dato.anionacimiento<1991) then 
+			insertarOrdenado(lNue,l^.dato);
+		l:=l^.sig;	
+	end;
+end;
+
+////PROGRAMA PRINCIPAL ////
+var
+	l,lNue:lista;
+begin
+	l,lNue:=nil;
+	cargarLista(l);///SE DISPONE
+	recorrerLista(l);
+	listaNueva(l,lNue);
+end.
