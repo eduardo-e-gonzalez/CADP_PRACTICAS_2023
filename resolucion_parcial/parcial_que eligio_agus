@@ -1,3 +1,5 @@
+PUEDE FALLAR 
+
 program 15-06-2018;
 type
     provincias=1..23;
@@ -13,6 +15,17 @@ type
         dato:estancias;
         sig:lista;
     end;
+
+    vector_pro= array[provincias] of integer;
+
+procedure inicializarVector(var vp:vector_pro);
+var
+    i:integer;
+begin
+    for i:=1 to 23 do begin
+        v[i]:=0;
+    end;
+end;
 
 procedure leerEstancia(var e:estancias);
 begin
@@ -43,6 +56,7 @@ procedure cargarEstancias(var l:lista);
 var
     e:estancias;
 begin
+    inicializarVactor(vp);
     leerEstancia(e);
     while(e.codigoEstancia<>0) do begin
         inseertarlista(l,e);
@@ -63,25 +77,51 @@ end;
 
 procedure maximoGanado(l:lista; var cod1, cod2:integer);
 var
-    max1, max2:integer;
+    vp:vector_pro;
+    i,max1, max2:integer;
+    cantGanadoPro : vector_pro;
 begin
     max1:=-1;
     max2:=-1;
-    if(l^.dato.cantGanado>max1) then begin
-        max2:=max1;
-        max1:=l^.dato.cantGanado;
-        cod2:=cod1;
-        cod1:=l^.dato.codigoProvincia;
-    end
-    else
-        if(l^.dato.cantGanado>max2) then begin
-            max2:=l^.dato.cantGanado;
-            cod2:=l^.dato.codigoProvincia;
+    while(l<>nil) do begin
+        ld:=l^.dato;
+        provinciaActual:=ld.codigoProvincia;
+        cantGanadoPro:=0;
+        while(l<>nil) and (ld.codigoProvincia=provinciaActual) do begin
+            cantGanadoPro[ld.codigoProvincia]:=cantGanadoPro[ld.codigoProvincia]+ld.cantGanado; // sumo la cantidad de ganado de la provincia
+            l:=l^.sig;
         end;
-end
-
-
-
+        for i:= 1 to 23 do begin                    //busco el maximo y el segundo maximo
+            if(cantGanadoPro[i]>max1) then begin
+                max2:=max1;
+                max1:=cantGanadoPro[i];
+                cod2:=cod1;
+                cod1:=i;
+            end
+            else
+                if(cantGanadoPro[i]>max2) then begin
+                    max2:=cantGanadoPro[i];
+                    cod2:=i;
+                end;
+        end;
+    end;
+end;
+////////////////////////////////no se si puede ir 
+procedure recorrido(l:lista);
+var
+    provinciaActual:provincias;
+    cantGanadoPro:integer;
+begin
+     while(l<>nil) do begin
+        ld:=l^.dato;
+        provinciaActual:=ld.codigoProvincia;
+        cantGanadoPro:=0;
+        while(l<>nil) and (ld.codigoProvincia=provinciaActual) do begin
+            cantGanadoPro[ld.codigoProvincia]:=cantGanadoPro[ld.codigoProvincia]+ld.cantGanado; // sumo la cantidad de ganado de la provincia
+            l:=l^.sig;
+        end;
+    end;
+////////////////////////////////////////
 //////////////PROGRAMA PRINCIPAL/////////////////////
 
 var
@@ -96,5 +136,5 @@ begin
     else
         writeln('La estancia 234 no se encuentra en la lista');
     maximoGanado(l, cod1, cod2);
-        writeln( cod1, ' y ', cod2,' solo porque agus lo quioere');
+    writeln('La provincias con mas ganado son: ', cod1, ' y ', cod2);
 end.
