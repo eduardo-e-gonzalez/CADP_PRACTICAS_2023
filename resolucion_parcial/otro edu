@@ -1,0 +1,155 @@
+program parcial15-7-2023;
+type
+    equipos=1..28;
+    fechas=1..27;
+    calificaciones=1..10;
+
+    vectort_calificacion=array[fechas] of integer; //SE DISPONE
+
+    jugador=record
+        codigo:integer;
+        nomYape:string
+        codEquipo:integer;
+        nacimiento:integer;
+        calificacion:integer;
+    end;
+
+    vector_equipos=array[equipos] of integer;
+
+    lista=^nodo
+        nodo=record;
+        dato:jugador;
+        sig:lista;
+    end;
+
+inicializarVactor(var v:vector_equipos);
+var
+    i:integer;
+begin
+    for i:=1 to 28 do begin
+        v[i]:=0;
+    end;
+end;
+
+procedure cargarJugadores(var j:jugador); //SE DISPONE
+
+function cumple14fechas(v:vector_calificacion):boolean;
+var
+    i:integer;
+    cant:integer
+begin
+    cant:=0;
+    for i:=1 to 27 do begin     
+        if(v[i]>0)then
+            cant:=cant+1;
+            end;
+    end;
+    cumple14fechas:=(cant>14);
+end;
+function promedio(v:vector_calificacion):real;
+var
+    i:integer;
+    suma:integer;
+begin
+    for i:=1 to 27 do begin
+        suma:=suma+v[i];
+    end;
+    promedio:=suma/27;
+end;
+
+procedure recorrido(l:lista);
+var
+    i:integer;
+    v
+    vc:vector_calificacion;
+    cant35:integer;
+    maxCali1,maxCali2:integer;
+    Maxcod1,Maxcod2:integer;
+    cantPartidos:integer;
+    sumaCalificacion:integer;
+    promedio:real;
+begin
+    maxCali1:=0;
+    maxCali2:=0;
+    cantPartidos:=0;
+    sumaCalificacion:=0;
+        while(l<>nil)do begin
+                promedio:=0;
+            if(ld.nacimiento>1987)then
+                ve[ld.codEquipo]:=ve[ld.codEquipo]+1;   //PUNTO A sumo al vector de equipos
+            if (cumple(ld.calificacion))then
+                if(promedio(v) > maxCali1)then begin
+                    maxCali2:=maxCali1;
+                    maxCali1:=promedio/27;
+                    Maxcod2:=Maxcod1;
+                    Maxcod1:=ld.codEquipo;
+                end
+                else
+                    if(promedio/27 > maxCali2)then begin
+                        maxCali2:=promedio/27;
+                        Maxcod2:=ld.codEquipo;
+                    end;
+                end;
+            end;
+        end;
+    for i:= 1 to 28 do begin
+        writeln('El equipo ',i,' tiene ',ve[i],' jugadores de mas de 35 años');
+    end;    
+
+procedure insertarOrdenado(var l:lista; ju:jugador);
+var
+    ant,act,nue:lista;
+begin
+    ant:=l;
+    act:=l;
+    while(act<>nil) and (act^.dato.codigo>ju.codigo) do begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if(act=ant) then begin;
+        l:=nue;
+    end
+    else begin
+        ant^.sig:=nue;
+    end;    
+    nue^.sig:=act;
+end;
+
+function cumpleCodigo(dni:integer):boolean;
+var
+    par,impar:integer;
+begin
+    par:=0;
+    impar:=0;
+    while(dni<>0)do begin
+        dni:=dni mod 10;
+        if((dni mod 2)=0)then
+            par:=par+1;
+        else
+            impar:=impar+1;
+        dni:=dni div 10;
+    end;
+    cumpleCodigo:=(par=3);
+end;
+
+procedure listaNueva(l:lista; var l2:lista);
+var
+    ju:jugador;
+begin
+    ld:=l^.dato
+    while(l<>nil)do begin
+    if((cumpleCodigo(ju)) and (ld.nacimiento>=1983)and(ld.nacimiento=<1990) then begin
+        insertarOrdenado(l2,ju);
+    l^.sig:=l2;
+end;
+
+///////////////PROGRAMA PRINCIPAL/////////////////////
+
+var
+    l:lista;
+begin 
+    cargarJugadores(ju);//SE DISPONE
+    recorrido(l,);
+    writeln('El equipo ',Maxcod1,' tiene el mejor promedio de calificacion con ',maxCali1);
+    listaNueva(l,l2);
+end;
